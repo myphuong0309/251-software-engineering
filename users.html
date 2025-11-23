@@ -10,6 +10,7 @@
 <body class="bg-gray-50 font-sans">
 
     <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar (Fixed styling to match other pages) -->
         <aside class="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
             <div class="p-6 flex items-center gap-2 text-blue-800 font-bold text-xl border-b border-gray-100">
                 <i class="fa-solid fa-shapes text-2xl"></i> 
@@ -23,6 +24,7 @@
                 <a href="coordinator.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-calendar-check w-5 text-center"></i> Meeting Management
                 </a>
+                <!-- Active State -->
                 <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-users w-5 text-center"></i> User Management
                 </a>
@@ -30,9 +32,17 @@
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i> Reports & Analytics
                 </a>
             </nav>
+            
+            <div class="p-4 border-t border-gray-100">
+                <a href="login.html" class="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium px-4 py-2 hover:bg-red-50 rounded-lg transition">
+                    <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Logout
+                </a>
+            </div>
         </aside>
 
+        <!-- Main Content -->
         <main class="flex-1 ml-64 overflow-y-auto p-8">
+            <!-- Header -->
             <header class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">Coordinator Dashboard</h1>
@@ -47,7 +57,9 @@
                 </div>
             </header>
 
+            <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <!-- Total Users -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex justify-between items-start">
                         <div>
@@ -60,6 +72,7 @@
                     </div>
                 </div>
 
+                <!-- Students -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex justify-between items-start">
                         <div>
@@ -72,6 +85,7 @@
                     </div>
                 </div>
 
+                <!-- Tutors -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex justify-between items-start">
                         <div>
@@ -84,6 +98,7 @@
                     </div>
                 </div>
 
+                <!-- Active Sessions -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex justify-between items-start">
                         <div>
@@ -97,16 +112,20 @@
                 </div>
             </div>
 
+            <!-- User Management Section -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <!-- Toolbar -->
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                     <h3 class="text-lg font-bold text-gray-800 whitespace-nowrap">User Management</h3>
                     
                     <div class="flex flex-1 w-full justify-end gap-3">
-                         <div class="relative w-full md:w-64">
+                         <!-- Search -->
+                        <div class="relative w-full md:w-64">
                             <input type="text" placeholder="Search users..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
                         </div>
 
+                        <!-- Filters -->
                         <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option>All Roles</option>
                             <option>Student</option>
@@ -118,12 +137,14 @@
                             <option>Inactive</option>
                         </select>
 
+                        <!-- Add Button -->
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap">
                             Add New User
                         </button>
                     </div>
                 </div>
 
+                <!-- Table -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -139,6 +160,7 @@
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
+                            <!-- Row 1 -->
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">U001</td>
                                 <td class="py-4 px-4 text-gray-800">Nguyen Van A</td>
@@ -148,10 +170,11 @@
                                 <td class="py-4 px-4 text-gray-600">12</td>
                                 <td class="py-4 px-4 text-gray-500">2024-01-15</td>
                                 <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200"><i class="fa-solid fa-user-xmark"></i></button>
+                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
                                 </td>
                             </tr>
+                            <!-- Row 2 -->
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">U002</td>
                                 <td class="py-4 px-4 text-gray-800">Tran Thi B</td>
@@ -161,10 +184,11 @@
                                 <td class="py-4 px-4 text-gray-600">45</td>
                                 <td class="py-4 px-4 text-gray-500">2024-01-15</td>
                                 <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200"><i class="fa-solid fa-user-xmark"></i></button>
+                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
                                 </td>
                             </tr>
+                            <!-- Row 3: Le Van C (Modified Icon) -->
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">U003</td>
                                 <td class="py-4 px-4 text-gray-800">Le Van C</td>
@@ -174,10 +198,12 @@
                                 <td class="py-4 px-4 text-gray-600">5</td>
                                 <td class="py-4 px-4 text-gray-500">2024-01-10</td>
                                 <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200"><i class="fa-solid fa-user-xmark"></i></button>
+                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <!-- Changed icon to 'user-check' and color to green for activation -->
+                                    <button class="p-1.5 text-green-600 hover:bg-green-50 rounded border border-green-200" title="Activate"><i class="fa-solid fa-user-check"></i></button>
                                 </td>
                             </tr>
+                            <!-- Row 4 -->
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">U004</td>
                                 <td class="py-4 px-4 text-gray-800">Pham Van D</td>
@@ -187,8 +213,8 @@
                                 <td class="py-4 px-4 text-gray-600">38</td>
                                 <td class="py-4 px-4 text-gray-500">2024-01-14</td>
                                 <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200"><i class="fa-solid fa-user-xmark"></i></button>
+                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
+                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
                                 </td>
                             </tr>
                         </tbody>
