@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Schedule - BK Tutor Program</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+        <!-- Logo -->
+        <a href="dashboard.html" class="flex items-center gap-2">
+            <img src="images/logo.png" alt="Logo" class="h-9 w-auto">
+            <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
+                BK Tutor Program
+            </span>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+            <a href="dashboard.html"
+               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                Dashboard
+            </a>
+            <a href="find-tutor.html"
+               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                Find a Tutor
+            </a>
+            <a href="schedule.html"
+               class="text-blue-600 border-b-2 border-blue-600 pb-1">
+                My Schedule
+            </a>
+            <a href="resources.html"
+               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                Resources
+            </a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="flex items-center gap-3">
+            <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
+                🔔
+            </button>
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
+                    JD
+                </div>
+                <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <!-- Page title + view toggles -->
+    <section class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">My Schedule</h1>
+
+        <!-- List / Calendar toggle -->
+        <div class="inline-flex rounded-lg border border-gray-200 bg-white overflow-hidden">
+            <button
+                class="px-4 py-2 text-sm font-semibold bg-blue-600 text-white">
+                List
+            </button>
+            <button
+                class="px-4 py-2 text-sm text-gray-600 hover:text-blue-600">
+                Calendar
+            </button>
+        </div>
+    </section>
+
+    <!-- Schedule Card -->
+    <section class="bg-white rounded-xl shadow-sm border border-gray-100">
+        <!-- Tabs -->
+        <div class="border-b border-gray-100 px-4 sm:px-6">
+            <div class="flex gap-6 text-sm">
+                <!-- Upcoming tab (inactive) -->
+                <a href="schedule-upcoming.html"
+                   class="py-3 text-gray-500 hover:text-blue-600">
+                    Upcoming Sessions
+                </a>
+                <!-- Past tab (active) -->
+                <button class="py-3 border-b-2 border-blue-600 text-blue-600 font-semibold">
+                    Past Sessions
+                </button>
+            </div>
+        </div>
+
+        <!-- Sessions list -->
+        <div class="px-4 sm:px-6 py-5 space-y-4">
+            <!-- Session 1 – View Evaluation -->
+            <div class="border border-gray-100 rounded-xl p-4 sm:p-5">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-start gap-4">
+                        <!-- Avatar placeholder -->
+                        <div class="w-10 h-10 rounded-full border border-gray-300 bg-white"></div>
+
+                        <div class="flex-1 space-y-1">
+                            <h3 class="text-base font-semibold text-gray-900">Dr. Jane Smith</h3>
+                            <p class="text-sm text-gray-600">CO3001 – Software Engineering</p>
+                            <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-1">
+                                <span class="flex items-center gap-1">
+                                    📅 Oct 8, 2023
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    ⏰ 2:00 PM – 3:30 PM
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single action button -->
+                    <div class="flex pt-2">
+                        <button
+                            class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium
+                                   border border-blue-700 text-blue-700 hover:bg-blue-50 hover:border-blue-800 transition">
+                            View Evaluation
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session 2 – Evaluate Session -->
+            <div class="border border-gray-100 rounded-xl p-4 sm:p-5">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-start gap-4">
+                        <!-- Avatar placeholder -->
+                        <div class="w-10 h-10 rounded-full border border-gray-300 bg-white"></div>
+
+                        <div class="flex-1 space-y-1">
+                            <h3 class="text-base font-semibold text-gray-900">Prof. Robert Chen</h3>
+                            <p class="text-sm text-gray-600">CO2003 – Data Structures and Algorithms</p>
+                            <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-1">
+                                <span class="flex items-center gap-1">
+                                    📅 Oct 5, 2023
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    ⏰ 10:00 AM – 11:30 AM
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Single action button -->
+                    <div class="flex pt-2">
+                        <button
+                            class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium
+                                   bg-blue-700 text-white hover:bg-blue-800 transition">
+                            Evaluate Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

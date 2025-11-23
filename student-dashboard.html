@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BK Tutor Program – Student Dashboard</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="dashboard.html" class="flex items-center gap-2">
+                <img src="images/logo.png" alt="Logo" class="h-9 w-auto">
+                <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
+                    BK Tutor Program
+                </span>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="dashboard.html" class="text-blue-600 border-b-2 border-blue-600 pb-1">
+                    Dashboard
+                </a>
+                <a href="find-tutor.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    Find a Tutor
+                </a>
+                <a href="schedule.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    My Schedule
+                </a>
+                <a href="resources.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    Resources
+                </a>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="flex items-center gap-3">
+                <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
+                    🔔
+                </button>
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
+                        JD
+                    </div>
+                    <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <!-- Page Title -->
+        <section>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Welcome back, John!</h1>
+        </section>
+
+        <!-- Upcoming Session Card -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-lg font-bold text-gray-900 mb-4">Upcoming Session</h2>
+            <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                <!-- Tutor Avatar -->
+                <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-semibold text-blue-600">
+                    JS
+                </div>
+
+                <!-- Session Info -->
+                <div class="flex-1 space-y-1">
+                    <h3 class="text-base font-semibold text-gray-900">Dr. Jane Smith</h3>
+                    <p class="text-sm text-gray-600">CO3001 – Software Engineering</p>
+                    <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
+                        <span class="flex items-center gap-1">📅 Oct 15, 2023</span>
+                        <span class="flex items-center gap-1">⏰ 2:00 PM – 3:30 PM</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-row flex-wrap gap-2">
+                    <a href="#"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition">
+                        Join Online Meeting
+                    </a>
+                    <a href="#"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:border-blue-500 hover:text-blue-600 transition">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Find Tutor -->
+            <a href="find-tutor.html"
+               class="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10 flex flex-col items-center text-center hover:shadow-md hover:-translate-y-0.5 transition">
+                <div class="text-4xl mb-4">🔍</div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Find a New Tutor</h3>
+                <p class="text-sm text-gray-500">Browse available tutors</p>
+            </a>
+
+            <!-- View Schedule -->
+            <a href="schedule.html"
+               class="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10 flex flex-col items-center text-center hover:shadow-md hover:-translate-y-0.5 transition">
+                <div class="text-4xl mb-4">📅</div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">View My Schedule</h3>
+                <p class="text-sm text-gray-500">Manage your sessions</p>
+            </a>
+        </section>
+
+        <!-- Notifications -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-semibold text-gray-900">Notifications</h2>
+                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-xs font-semibold text-blue-700">
+                    3 new
+                </span>
+            </div>
+            <ul class="space-y-3 text-sm">
+                <li class="flex justify-between gap-4">
+                    <span class="text-gray-700">Your session request with Dr. Smith was accepted</span>
+                    <span class="text-xs text-gray-400 whitespace-nowrap">2 hours ago</span>
+                </li>
+                <li class="flex justify-between gap-4">
+                    <span class="text-gray-700">Reminder: Submit feedback for your last session</span>
+                    <span class="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
+                </li>
+                <li class="flex justify-between gap-4">
+                    <span class="text-gray-700">New resource added for CO3001</span>
+                    <span class="text-xs text-gray-400 whitespace-nowrap">2 days ago</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Matched Tutors -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Matched Tutors</h2>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-4">
+                    <!-- Avatar placeholder -->
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
+                        RC
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold text-gray-900">Prof. Robert Chen</h3>
+                        <p class="text-sm text-gray-600">
+                            CO2003 – Data Structures and Algorithms
+                        </p>
+                    </div>
+                </div>
+
+                <a href="schedule-upcoming.html"
+                   class="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 hover:border-blue-800 transition">
+                    Schedule New Session
+                </a>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

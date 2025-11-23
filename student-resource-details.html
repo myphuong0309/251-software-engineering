@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Details - BK Tutor Program</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="dashboard.html" class="flex items-center gap-2">
+                <img src="images/logo.png" alt="BK Logo" class="h-9 w-auto">
+                <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
+                    BK Tutor Program
+                </span>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <a href="dashboard.html"
+                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    Dashboard
+                </a>
+                <a href="find-tutor.html"
+                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    Find a Tutor
+                </a>
+                <a href="schedule-upcoming.html"
+                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
+                    My Schedule
+                </a>
+                <a href="resources.html"
+                   class="text-blue-600 border-b-2 border-blue-600 pb-1">
+                    Resources
+                </a>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="flex items-center gap-3">
+                <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
+                    🔔
+                </button>
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
+                        JD
+                    </div>
+                    <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <!-- Back link -->
+        <a href="resources.html"
+           class="inline-flex items-center text-sm text-blue-700 hover:text-blue-800 mb-2">
+            ← Back to Resources
+        </a>
+
+        <!-- Course Header -->
+        <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <header class="space-y-1">
+                <h2 class="text-2xl font-bold text-gray-900">CO3001</h2>
+                <p class="text-sm text-gray-700">Software Engineering</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    <span class="font-semibold text-gray-800">Tutor:</span> Dr. Nguyen Van A
+                </p>
+            </header>
+        </section>
+
+        <!-- Title + Count -->
+        <section class="space-y-1">
+            <h3 class="text-lg font-semibold text-gray-900">Session Materials</h3>
+            <p class="text-sm text-gray-500">3 resources available</p>
+        </section>
+
+        <!-- Materials List -->
+        <section class="space-y-4">
+            <!-- Material Item 1 -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col md:flex-row md:items-center gap-4">
+                <!-- File icon -->
+                <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-100 text-red-700 flex items-center justify-center text-xs font-bold">
+                    PDF
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 space-y-1">
+                    <h4 class="text-base font-semibold text-gray-900">
+                        Software Engineering Principles - Chapter 1
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                        Introduction to software engineering methodologies and best practices
+                    </p>
+                    <div class="text-xs text-gray-500 mt-1">
+                        <span>PDF Document</span> •
+                        <span>2.4 MB</span> •
+                        <span>Uploaded 1/15/2024</span> •
+                        <span>By Dr. Nguyen Van A</span>
+                    </div>
+                </div>
+
+                <!-- Action -->
+                <div class="flex md:self-stretch items-center">
+                    <a href="#"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium
+                              bg-blue-700 text-white hover:bg-blue-800 transition">
+                        Access Resource
+                    </a>
+                </div>
+            </div>
+
+            <!-- Material Item 2 -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col md:flex-row md:items-center gap-4">
+                <!-- File icon -->
+                <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">
+                    VID
+                </div>
+
+                <!-- Info -->
+                <div class="flex-1 space-y-1">
+                    <h4 class="text-base font-semibold text-gray-900">
+                        UML Diagrams Tutorial
+                    </h4>
+                    <p class="text-sm text-gray-600">
+                        Comprehensive guide to creating UML diagrams for software design
+                    </p>
+                    <div class="text-xs text-gray-500 mt-1">
+                        <span>Video</span> •
+                        <span>145 MB</span> •
+                        <span>Uploaded 1/16/2024</span> •
+                        <span>By Dr. Nguyen Van A</span>
+                    </div>
+                </div>
+
+                <!-- Action -->
+                <div class="flex md:self-stretch items-center">
+                    <a href="#"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium
+                              bg-blue-700 text-white hover:bg-blue-800 transition">
+                        Access Resource
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
