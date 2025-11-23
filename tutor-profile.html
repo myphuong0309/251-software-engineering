@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BK Tutor Program</title>
+
+    <!-- DÒNG QUAN TRỌNG NHẤT: Kết nối đến file CSS của bạn -->
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+<!-- Header Component -->
+<header class="main-header">
+    <div class="header-container">
+        <a href="#" class="logo">
+            <img src="images/logo.png" alt="Logo">
+            <span>BK Tutor Program</span>
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="find-tutor.html" class="active">Find a Tutor</a></li>
+                <li><a href="schedule.html">My Schedule</a></li>
+                <li><a href="resources.html">Resources</a></li>
+            </ul>
+        </nav>
+        <div class="user-profile">
+            <a href="#" class="notification-bell">🔔</a>
+            <a href="#" class="profile-avatar">JD</a>
+            <span>John Doe</span>
+        </div>
+    </div>
+</header>
+<!-- tutor-profile.html -->
+<main class="container">
+    <a href="find-tutor.html" class="back-link">← Back to search results</a>
+
+    <div class="card profile-card">
+        <!-- Profile Header -->
+        <header class="profile-header">
+            <div class="tutor-avatar-placeholder large"></div>
+            <div class="tutor-main-info">
+                <h1>Dr. Jane Smith</h1>
+                <p>Faculty of Computer Science</p>
+                <div class="tutor-meta">
+                    <span class="tutor-rating">★★★★★ 4.8</span>
+                    <span>2 reviews</span>
+                </div>
+            </div>
+        </header>
+        <div class="skill-tags">
+            <span class="tag">Java</span>
+            <span class="tag">Databases</span>
+            <span class="tag">Software Engineering</span>
+        </div>
+
+        <!-- Sections -->
+        <section class="profile-section">
+            <h2>About</h2>
+            <p>Dr. Jane Smith is a professor in the Faculty of Computer Science...</p>
+        </section>
+
+        <section class="profile-section">
+            <h2>Education</h2>
+            <p>Ph.D. in Computer Science, Stanford University</p>
+        </section>
+
+        <section class="profile-section">
+            <h2>Student Reviews</h2>
+            <div class="review-item">
+                <h4>John Doe <span class="review-date">October 5, 2023</span></h4>
+                <div class="review-rating">★★★★★</div>
+                <p>She is an excellent tutor. She explained complex concepts...</p>
+            </div>
+            <div class="review-item">
+                <h4>Alice Chen <span class="review-date">September 28, 2023</span></h4>
+                <div class="review-rating">★★★★☆</div>
+                <p>Very knowledgeable and patient. Helped me a lot with my database project.</p>
+            </div>
+        </section>
+
+        <!-- Booking Form -->
+        <section class="profile-section booking-section">
+            <h2>Book a Session</h2>
+            <form>
+                <div class="form-group">
+                    <label for="topic">Topic/Subject</label>
+                    <input type="text" id="topic" placeholder="e.g., Database Normalization">
+                </div>
+                <button type="submit" class="btn btn-primary">Send Matching Request</button>
+                <button type="button" class="btn btn-secondary">Contact Tutor</button>
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>
