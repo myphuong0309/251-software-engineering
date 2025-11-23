@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Management - Coordinator Dashboard</title>
+    <title>Coordinator Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -21,18 +21,22 @@
             </div>
             
             <nav class="flex-1 px-4 space-y-2 mt-6">
-                <a href="coordinator.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
+                <!-- Active Link: Meeting Management -->
+                <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg font-medium">
                     <i class="fa-solid fa-calendar-check w-5 text-center"></i> Meeting Management
                 </a>
-                <!-- Active State -->
-                <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg font-medium transition">
+                
+                <!-- Link to User Management -->
+                <a href="users.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-users w-5 text-center"></i> User Management
                 </a>
+                
+                <!-- Link to Reports -->
                 <a href="reports.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i> Reports & Analytics
                 </a>
             </nav>
-            
+
             <div class="p-4 border-t border-gray-100">
                 <a href="login.html" class="flex items-center gap-2 text-red-500 hover:text-red-700 font-medium px-4 py-2 hover:bg-red-50 rounded-lg transition">
                     <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Logout
@@ -40,13 +44,13 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content (Added ml-64 to offset fixed sidebar) -->
         <main class="flex-1 ml-64 overflow-y-auto p-8">
             <!-- Header -->
-            <header class="flex justify-between items-start mb-8">
+            <header class="flex justify-between items-center mb-8">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">Coordinator Dashboard</h1>
-                    <p class="text-gray-500 text-sm mt-1">Tutor Program Management System</p>
+                    <h2 class="text-2xl font-bold text-gray-800">Coordinator Dashboard</h2>
+                    <p class="text-gray-500 text-sm mt-1">Overview of all tutor sessions</p>
                 </div>
                 <div class="flex items-center gap-4">
                     <button class="text-gray-400 hover:text-blue-600"><i class="fa-solid fa-bell text-xl"></i></button>
@@ -59,163 +63,149 @@
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <!-- Total Users -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-blue-100 text-blue-600 rounded-lg"><i class="fa-solid fa-clock text-xl"></i></div>
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">Total Users</p>
-                            <h3 class="text-3xl font-bold text-gray-800">324</h3>
+                            <p class="text-sm text-gray-500">Total Sessions</p>
+                            <p class="text-2xl font-bold text-gray-800">8</p>
                         </div>
-                        <span class="text-green-500 text-sm font-semibold flex items-center bg-green-50 px-2 py-1 rounded">
-                            <i class="fa-solid fa-arrow-trend-up mr-1"></i> +18
-                        </span>
                     </div>
                 </div>
-
-                <!-- Students -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-green-100 text-green-600 rounded-lg"><i class="fa-solid fa-check-circle text-xl"></i></div>
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">Students</p>
-                            <h3 class="text-3xl font-bold text-gray-800">245</h3>
+                            <p class="text-sm text-gray-500">Completed</p>
+                            <p class="text-2xl font-bold text-gray-800">2</p>
                         </div>
-                        <span class="text-green-500 text-sm font-semibold flex items-center bg-green-50 px-2 py-1 rounded">
-                            <i class="fa-solid fa-arrow-trend-up mr-1"></i> +15
-                        </span>
                     </div>
                 </div>
-
-                <!-- Tutors -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-yellow-100 text-yellow-600 rounded-lg"><i class="fa-solid fa-hourglass-half text-xl"></i></div>
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">Tutors</p>
-                            <h3 class="text-3xl font-bold text-gray-800">76</h3>
+                            <p class="text-sm text-gray-500">Upcoming</p>
+                            <p class="text-2xl font-bold text-gray-800">4</p>
                         </div>
-                        <span class="text-green-500 text-sm font-semibold flex items-center bg-green-50 px-2 py-1 rounded">
-                            <i class="fa-solid fa-arrow-trend-up mr-1"></i> +3
-                        </span>
                     </div>
                 </div>
-
-                <!-- Active Sessions -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="p-3 bg-red-100 text-red-600 rounded-lg"><i class="fa-solid fa-ban text-xl"></i></div>
                         <div>
-                            <p class="text-sm text-gray-500 mb-1">Active Sessions</p>
-                            <h3 class="text-3xl font-bold text-gray-800">42</h3>
+                            <p class="text-sm text-gray-500">Cancelled</p>
+                            <p class="text-2xl font-bold text-gray-800">1</p>
                         </div>
-                        <span class="text-green-500 text-sm font-semibold flex items-center bg-green-50 px-2 py-1 rounded">
-                            <i class="fa-solid fa-arrow-trend-up mr-1"></i> +8
-                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- User Management Section -->
+            <!-- Meeting Overview Section -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <!-- Toolbar -->
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h3 class="text-lg font-bold text-gray-800 whitespace-nowrap">User Management</h3>
-                    
-                    <div class="flex flex-1 w-full justify-end gap-3">
-                         <!-- Search -->
-                        <div class="relative w-full md:w-64">
-                            <input type="text" placeholder="Search users..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400"></i>
-                        </div>
-
-                        <!-- Filters -->
-                        <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>All Roles</option>
-                            <option>Student</option>
-                            <option>Tutor</option>
-                        </select>
-                         <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>All Status</option>
-                            <option>Active</option>
-                            <option>Inactive</option>
-                        </select>
-
-                        <!-- Add Button -->
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap">
-                            Add New User
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-gray-800">Meeting Overview</h3>
+                    <div class="flex gap-3">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center">
+                            <i class="fa-solid fa-file-export mr-2"></i> Export to CSV
                         </button>
                     </div>
                 </div>
 
-                <!-- Table -->
+                <!-- Filters -->
+                <div class="flex gap-4 mb-6">
+                    <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-lg pl-4 pr-10 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>All Status</option>
+                            <option>Scheduled</option>
+                            <option>Completed</option>
+                            <option>Cancelled</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-3 text-xs text-gray-400 pointer-events-none"></i>
+                    </div>
+                    
+                    <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-lg pl-4 pr-10 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>This Week</option>
+                            <option>This Month</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3 top-3 text-xs text-gray-400 pointer-events-none"></i>
+                    </div>
+                    
+                    <button class="text-gray-500 hover:text-blue-600 text-sm font-medium flex items-center gap-2"><i class="fa-solid fa-filter"></i> More Filters</button>
+                </div>
+
+                <!-- Table (Styled to match Users table) -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-50 text-xs text-gray-500 uppercase font-semibold border-b border-gray-100">
-                                <th class="py-3 px-4">User ID</th>
-                                <th class="py-3 px-4">Name</th>
-                                <th class="py-3 px-4">Email</th>
-                                <th class="py-3 px-4">Role</th>
-                                <th class="py-3 px-4">Status</th>
-                                <th class="py-3 px-4">Sessions</th>
-                                <th class="py-3 px-4">Last Active</th>
-                                <th class="py-3 px-4 text-center">Actions</th>
+                                <th class="py-4 px-4">Meeting ID</th>
+                                <th class="py-4 px-4">Tutor</th>
+                                <th class="py-4 px-4">Student</th>
+                                <th class="py-4 px-4">Course</th>
+                                <th class="py-4 px-4">Date & Time</th>
+                                <th class="py-4 px-4">Status</th>
+                                <th class="py-4 px-4 text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm divide-y divide-gray-100">
-                            <!-- Row 1 -->
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="py-4 px-4 font-bold text-gray-700">U001</td>
-                                <td class="py-4 px-4 text-gray-800">Nguyen Van A</td>
-                                <td class="py-4 px-4 text-gray-500">nguyenvana@hcmut.edu.vn</td>
-                                <td class="py-4 px-4"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">Student</span></td>
-                                <td class="py-4 px-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Active</span></td>
-                                <td class="py-4 px-4 text-gray-600">12</td>
-                                <td class="py-4 px-4 text-gray-500">2024-01-15</td>
-                                <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
+                                <td class="py-4 px-4 font-bold text-gray-700">#1021</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">JS</div> 
+                                        <span class="font-medium text-gray-800">Dr. Jane Smith</span>
+                                    </div>
                                 </td>
+                                <td class="py-4 px-4 text-gray-600">Sophia Davis</td>
+                                <td class="py-4 px-4 text-gray-600">Database Systems</td>
+                                <td class="py-4 px-4 text-gray-500">
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-800 font-medium">2025-11-15</span>
+                                        <span class="text-xs">14:00 PM</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">Scheduled</span></td>
+                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
                             </tr>
-                            <!-- Row 2 -->
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="py-4 px-4 font-bold text-gray-700">U002</td>
-                                <td class="py-4 px-4 text-gray-800">Tran Thi B</td>
-                                <td class="py-4 px-4 text-gray-500">tranthib@hcmut.edu.vn</td>
-                                <td class="py-4 px-4"><span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">Tutor</span></td>
-                                <td class="py-4 px-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Active</span></td>
-                                <td class="py-4 px-4 text-gray-600">45</td>
-                                <td class="py-4 px-4 text-gray-500">2024-01-15</td>
-                                <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
+                                <td class="py-4 px-4 font-bold text-gray-700">#1022</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xs font-bold">PR</div> 
+                                        <span class="font-medium text-gray-800">Prof. Robert</span>
+                                    </div>
                                 </td>
+                                <td class="py-4 px-4 text-gray-600">Alex Chen</td>
+                                <td class="py-4 px-4 text-gray-600">Algorithms</td>
+                                <td class="py-4 px-4 text-gray-500">
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-800 font-medium">2025-11-14</span>
+                                        <span class="text-xs">09:00 AM</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Completed</span></td>
+                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
                             </tr>
-                            <!-- Row 3: Le Van C (Modified Icon) -->
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="py-4 px-4 font-bold text-gray-700">U003</td>
-                                <td class="py-4 px-4 text-gray-800">Le Van C</td>
-                                <td class="py-4 px-4 text-gray-500">levanc@hcmut.edu.vn</td>
-                                <td class="py-4 px-4"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">Student</span></td>
-                                <td class="py-4 px-4"><span class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold">Inactive</span></td>
-                                <td class="py-4 px-4 text-gray-600">5</td>
-                                <td class="py-4 px-4 text-gray-500">2024-01-10</td>
-                                <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <!-- Changed icon to 'user-check' and color to green for activation -->
-                                    <button class="p-1.5 text-green-600 hover:bg-green-50 rounded border border-green-200" title="Activate"><i class="fa-solid fa-user-check"></i></button>
+                                <td class="py-4 px-4 font-bold text-gray-700">#1023</td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xs font-bold">DS</div> 
+                                        <span class="font-medium text-gray-800">Dr. Sarah</span>
+                                    </div>
                                 </td>
-                            </tr>
-                            <!-- Row 4 -->
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="py-4 px-4 font-bold text-gray-700">U004</td>
-                                <td class="py-4 px-4 text-gray-800">Pham Van D</td>
-                                <td class="py-4 px-4 text-gray-500">phamvand@hcmut.edu.vn</td>
-                                <td class="py-4 px-4"><span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">Tutor</span></td>
-                                <td class="py-4 px-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Active</span></td>
-                                <td class="py-4 px-4 text-gray-600">38</td>
-                                <td class="py-4 px-4 text-gray-500">2024-01-14</td>
-                                <td class="py-4 px-4 text-center space-x-2">
-                                    <button class="p-1.5 text-blue-600 hover:bg-blue-50 rounded border border-blue-200" title="Edit"><i class="fa-regular fa-pen-to-square"></i></button>
-                                    <button class="p-1.5 text-red-600 hover:bg-red-50 rounded border border-red-200" title="Deactivate"><i class="fa-solid fa-user-xmark"></i></button>
+                                <td class="py-4 px-4 text-gray-600">Michael Brown</td>
+                                <td class="py-4 px-4 text-gray-600">Software Eng.</td>
+                                <td class="py-4 px-4 text-gray-500">
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-800 font-medium">2025-11-12</span>
+                                        <span class="text-xs">16:00 PM</span>
+                                    </div>
                                 </td>
+                                <td class="py-4 px-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">Cancelled</span></td>
+                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
                             </tr>
                         </tbody>
                     </table>
