@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BK Tutor Program – Session Evaluation</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-white font-sans min-h-screen text-gray-800 overflow-y-scroll">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3 text-blue-800 font-bold text-xl">
+            <img src="images/logo.png" alt="BK Logo" class="h-10 w-auto object-contain">
+            <span>Tutor Program</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="student-dashboard.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-border-all"></i> Dashboard
+            </a>
+            <a href="student-find-tutor.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass"></i> Find a Tutor
+            </a>
+            <!-- My Schedule vẫn active -->
+            <a href="student-schedule-past.html" class="text-blue-600 border-b-2 border-blue-600 pb-4 -mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-calendar"></i> My Schedule
+            </a>
+            <a href="student-resources.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> Resources
+            </a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="text-gray-400 hover:text-blue-600" aria-label="Notifications">
+                <i class="fa-regular fa-bell text-lg"></i>
+            </button>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">
+                    JD
+                </div>
+                <span class="text-sm font-medium text-gray-600">John Doe</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <section class="flex justify-center">
+            <div class="w-full max-w-3xl bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 relative">
+
+                <!-- Close Icon: quay lại Past Sessions -->
+                <a href="student-schedule-past.html"
+                   class="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
+                   aria-label="Close">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </a>
+
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Session Evaluation</h1>
+
+                <p class="text-sm sm:text-base text-gray-700 mb-6">
+                    Feedback for your session with
+                    <span class="font-semibold">Dr. Jane Smith</span>
+                    on <span class="font-semibold">October 8, 2023</span>
+                </p>
+
+                <!-- Rating Rows -->
+                <div class="space-y-4 sm:space-y-5 mb-6">
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm sm:text-base text-gray-800">Teaching Quality</span>
+                        <div class="flex gap-1 text-gray-300">
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm sm:text-base text-gray-800">Communication</span>
+                        <div class="flex gap-1 text-gray-300">
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm sm:text-base text-gray-800">Punctuality</span>
+                        <div class="flex gap-1 text-gray-300">
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm sm:text-base text-gray-800">Helpfulness</span>
+                        <div class="flex gap-1 text-gray-300">
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-sm sm:text-base text-gray-800">Overall Satisfaction</span>
+                        <div class="flex gap-1 text-gray-300">
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                            <i class="fa-regular fa-star text-lg"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Textarea -->
+                <div class="mb-6">
+                    <label for="experience" class="block text-sm font-medium text-gray-800 mb-2">
+                        Share more about your experience (optional)
+                    </label>
+                    <textarea id="experience" rows="5"
+                              class="w-full rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm px-3 py-2 resize-none"
+                              placeholder="Write your comments here..."></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end gap-3 pt-2">
+                    <!-- Cancel: quay lại Past Sessions -->
+                    <a href="student-schedule-past.html"
+                       class="px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-600 hover:bg-gray-50 text-center">
+                        Cancel
+                    </a>
+                    <button
+                        class="px-5 py-2 rounded-lg bg-blue-700 text-sm font-medium text-white hover:bg-blue-800">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -10,10 +10,9 @@
 <body class="bg-gray-50 font-sans">
 
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar (Fixed styling to match other pages) -->
         <aside class="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
             <div class="p-6 flex items-center gap-2 text-blue-800 font-bold text-xl border-b border-gray-100">
-                <i class="fa-solid fa-shapes text-2xl"></i> 
+                <img src="images/logo.png" alt="Logo" class="h-8 w-8">
                 <div>
                     <p>BK Tutor</p>
                     <p class="text-xs text-gray-400 font-normal">Program</p>
@@ -21,17 +20,14 @@
             </div>
             
             <nav class="flex-1 px-4 space-y-2 mt-6">
-                <!-- Active Link: Meeting Management -->
-                <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg font-medium">
+                <a href="#" class="flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-3 rounded-lg font-medium shadow-sm">
                     <i class="fa-solid fa-calendar-check w-5 text-center"></i> Meeting Management
                 </a>
                 
-                <!-- Link to User Management -->
                 <a href="users.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-users w-5 text-center"></i> User Management
                 </a>
                 
-                <!-- Link to Reports -->
                 <a href="reports.html" class="flex items-center gap-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 px-4 py-3 rounded-lg font-medium transition">
                     <i class="fa-solid fa-chart-pie w-5 text-center"></i> Reports & Analytics
                 </a>
@@ -44,9 +40,7 @@
             </div>
         </aside>
 
-        <!-- Main Content (Added ml-64 to offset fixed sidebar) -->
         <main class="flex-1 ml-64 overflow-y-auto p-8">
-            <!-- Header -->
             <header class="flex justify-between items-center mb-8">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800">Coordinator Dashboard</h2>
@@ -61,7 +55,6 @@
                 </div>
             </header>
 
-            <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
                     <div class="flex items-center gap-4">
@@ -101,7 +94,6 @@
                 </div>
             </div>
 
-            <!-- Meeting Overview Section -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold text-gray-800">Meeting Overview</h3>
@@ -112,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Filters -->
                 <div class="flex gap-4 mb-6">
                     <div class="relative">
                         <select class="appearance-none bg-white border border-gray-300 rounded-lg pl-4 pr-10 py-2 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -135,7 +126,6 @@
                     <button class="text-gray-500 hover:text-blue-600 text-sm font-medium flex items-center gap-2"><i class="fa-solid fa-filter"></i> More Filters</button>
                 </div>
 
-                <!-- Table (Styled to match Users table) -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -167,7 +157,9 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-4"><span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">Scheduled</span></td>
-                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
+                                <td class="py-4 px-4 text-right">
+                                    <button onclick="openModal('Scheduled')" class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button>
+                                </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">#1022</td>
@@ -186,7 +178,9 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Completed</span></td>
-                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
+                                <td class="py-4 px-4 text-right">
+                                    <button onclick="openModal('Completed')" class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button>
+                                </td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition">
                                 <td class="py-4 px-4 font-bold text-gray-700">#1023</td>
@@ -205,7 +199,9 @@
                                     </div>
                                 </td>
                                 <td class="py-4 px-4"><span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">Cancelled</span></td>
-                                <td class="py-4 px-4 text-right"><button class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button></td>
+                                <td class="py-4 px-4 text-right">
+                                    <button onclick="openModal('Cancelled')" class="text-blue-600 hover:text-blue-800 font-medium text-sm">View Details</button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -213,6 +209,159 @@
             </div>
         </main>
     </div>
+
+    <div id="meetingModal" class="hidden fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300">
+        <div class="absolute inset-0 bg-gray-900 opacity-50" onclick="closeModal()"></div>
+        
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl z-10 mx-4 overflow-hidden transform transition-all scale-100 relative">
+            
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-100 bg-gray-50">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Meeting Details</h3>
+                    <p class="text-sm text-gray-500">ID: #1021</p>
+                </div>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6">
+                <div id="statusBanner" class="flex items-center justify-between p-4 rounded-lg mb-6 border border-l-4">
+                    <div class="flex items-center gap-3">
+                        <i id="statusIcon" class="text-lg"></i>
+                        <div>
+                            <p id="statusTitle" class="text-sm font-bold"></p>
+                            <p id="statusDesc" class="text-xs opacity-80"></p>
+                        </div>
+                    </div>
+                    <span id="statusBadge" class="px-3 py-1 rounded text-xs font-bold bg-white bg-opacity-50">Nov 15, 2025</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-5">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Course Info</label>
+                            <p class="text-lg font-bold text-gray-800 mt-1">Database Systems</p>
+                            <p class="text-sm text-gray-600">Chapter 4: Normalization</p>
+                        </div>
+                        
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Time & Duration</label>
+                            <div class="flex items-center gap-2 mt-1 text-gray-700">
+                                <i class="fa-regular fa-clock"></i>
+                                <span class="font-medium">14:00 PM - 16:00 PM</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Meeting Link</label>
+                            <a href="#" class="flex items-center gap-2 mt-1 text-blue-600 hover:underline truncate">
+                                <i class="fa-solid fa-video"></i> zoom.us/j/928392...
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 bg-gray-50 p-5 rounded-xl border border-gray-100">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold flex-shrink-0">JS</div>
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">Tutor</p>
+                                <p class="font-bold text-gray-800">Dr. Jane Smith</p>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200"></div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold flex-shrink-0">SD</div>
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">Student</p>
+                                <p class="font-bold text-gray-800">Sophia Davis</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Session Notes</label>
+                    <p class="text-sm text-gray-600 mt-2 bg-gray-50 p-3 rounded border border-gray-100">
+                        Student requested focus on 3NF and BCNF forms.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 px-6 py-4 flex justify-end border-t border-gray-100">
+                <button onclick="closeModal()" class="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-100 transition shadow-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('meetingModal');
+        
+        // Cấu hình giao diện cho từng trạng thái
+        const statusConfig = {
+            'Scheduled': {
+                bannerClass: 'bg-blue-50 border-blue-200 border-l-blue-600',
+                textClass: 'text-blue-800',
+                iconClass: 'text-blue-600',
+                icon: 'fa-regular fa-calendar',
+                title: 'Scheduled Meeting',
+                desc: 'This session is upcoming and ready to start.'
+            },
+            'Completed': {
+                bannerClass: 'bg-green-50 border-green-200 border-l-green-600',
+                textClass: 'text-green-800',
+                iconClass: 'text-green-600',
+                icon: 'fa-solid fa-check-circle',
+                title: 'Session Completed',
+                desc: 'This session was finished successfully.'
+            },
+            'Cancelled': {
+                bannerClass: 'bg-red-50 border-red-200 border-l-red-600',
+                textClass: 'text-red-800',
+                iconClass: 'text-red-600',
+                icon: 'fa-solid fa-ban',
+                title: 'Session Cancelled',
+                desc: 'This session was cancelled by the tutor.'
+            }
+        };
+
+        function openModal(status) {
+            // 1. Lấy config dựa trên status (mặc định là Scheduled nếu lỗi)
+            const config = statusConfig[status] || statusConfig['Scheduled'];
+            
+            // 2. Lấy các phần tử DOM
+            const banner = document.getElementById('statusBanner');
+            const icon = document.getElementById('statusIcon');
+            const title = document.getElementById('statusTitle');
+            const desc = document.getElementById('statusDesc');
+
+            // 3. Reset class cũ để tránh bị trùng lặp màu
+            banner.className = `flex items-center justify-between p-4 rounded-lg mb-6 border border-l-4 ${config.bannerClass}`;
+            
+            // 4. Cập nhật Icon và Màu chữ
+            icon.className = `${config.icon} ${config.iconClass} text-lg`;
+            title.className = `text-sm font-bold ${config.textClass}`;
+            desc.className = `text-xs ${config.textClass} opacity-80`;
+
+            // 5. Cập nhật nội dung chữ
+            title.innerText = config.title;
+            desc.innerText = config.desc;
+
+            // 6. Hiển thị Modal
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Đóng bằng phím ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") closeModal();
+        });
+    </script>
 
 </body>
 </html>

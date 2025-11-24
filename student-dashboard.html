@@ -7,47 +7,35 @@
 
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+<body class="bg-white font-sans min-h-screen text-gray-800 overflow-y-scroll">
 
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <a href="student-dashboard.html" class="flex items-center gap-2">
-                <img src="images/logo.png" alt="Logo" class="h-9 w-auto">
-                <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
-                    BK Tutor Program
-                </span>
+    <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3 text-blue-800 font-bold text-xl">
+            <img src="images/logo.png" alt="BK Logo" class="h-10 w-auto object-contain">
+            <span>Tutor Program</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="student-dashboard.html" class="text-blue-600 border-b-2 border-blue-600 pb-4 -mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-border-all"></i> Dashboard
             </a>
-
-            <!-- Navigation -->
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-                <a href="student-dashboard.html" class="text-blue-600 border-b-2 border-blue-600 pb-1">
-                    Dashboard
-                </a>
-                <a href="student-find-tutor.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    Find a Tutor
-                </a>
-                <a href="student-schedule.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    My Schedule
-                </a>
-                <a href="student-resources.html" class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    Resources
-                </a>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="flex items-center gap-3">
-                <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
-                    🔔
-                </button>
-                <div class="flex items-center gap-2">
-                    <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
-                        JD
-                    </div>
-                    <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
-                </div>
+            <a href="student-find-tutor.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass"></i> Find a Tutor
+            </a>
+            <a href="student-schedule-upcoming.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-regular fa-calendar"></i> My Schedule
+            </a>
+            <a href="student-resources.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> Resources
+            </a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="text-gray-400 hover:text-blue-600" aria-label="Notifications"><i class="fa-regular fa-bell text-lg"></i></button>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">JD</div>
+                <span class="text-sm font-medium text-gray-600">John Doe</span>
             </div>
         </div>
     </header>
@@ -56,12 +44,12 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <!-- Page Title -->
         <section>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Welcome back, John!</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Welcome back, John!</h1>
         </section>
 
         <!-- Upcoming Session Card -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 class="text-lg font-bold text-gray-900 mb-4">Upcoming Session</h2>
+            <h2 class="text-lg font-bold text-gray-800 mb-4">Upcoming Session</h2>
             <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
                 <!-- Tutor Avatar -->
                 <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-semibold text-blue-600">
@@ -70,7 +58,7 @@
 
                 <!-- Session Info -->
                 <div class="flex-1 space-y-1">
-                    <h3 class="text-base font-semibold text-gray-900">Dr. Jane Smith</h3>
+                    <h3 class="text-base font-semibold text-gray-800">Dr. Jane Smith</h3>
                     <p class="text-sm text-gray-600">CO3001 – Software Engineering</p>
                     <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
                         <span class="flex items-center gap-1">📅 Oct 15, 2023</span>
@@ -98,7 +86,7 @@
             <a href="student-find-tutor.html"
                class="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10 flex flex-col items-center text-center hover:shadow-md hover:-translate-y-0.5 transition">
                 <div class="text-4xl mb-4">🔍</div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">Find a New Tutor</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">Find a New Tutor</h3>
                 <p class="text-sm text-gray-500">Browse available tutors</p>
             </a>
 
@@ -106,7 +94,7 @@
             <a href="student-schedule-upcoming.html"
                class="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-10 flex flex-col items-center text-center hover:shadow-md hover:-translate-y-0.5 transition">
                 <div class="text-4xl mb-4">📅</div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">View My Schedule</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">View My Schedule</h3>
                 <p class="text-sm text-gray-500">Manage your sessions</p>
             </a>
         </section>
@@ -114,7 +102,7 @@
         <!-- Notifications -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <div class="flex items-center justify-between mb-3">
-                <h2 class="text-lg font-semibold text-gray-900">Notifications</h2>
+                <h2 class="text-lg font-semibold text-gray-800">Notifications</h2>
                 <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-xs font-semibold text-blue-700">
                     3 new
                 </span>
@@ -137,7 +125,7 @@
 
         <!-- Matched Tutors -->
         <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Matched Tutors</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Matched Tutors</h2>
 
             <div class="flex flex-col gap-4">
                 <div class="flex items-center gap-4">
@@ -146,7 +134,7 @@
                         RC
                     </div>
                     <div>
-                        <h3 class="text-base font-semibold text-gray-900">Prof. Robert Chen</h3>
+                        <h3 class="text-base font-semibold text-gray-800">Prof. Robert Chen</h3>
                         <p class="text-sm text-gray-600">
                             CO2003 – Data Structures and Algorithms
                         </p>

@@ -7,51 +7,35 @@
 
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+<body class="bg-white font-sans min-h-screen text-gray-800 overflow-y-scroll">
 
 <!-- Header -->
-<header class="bg-white border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
-        <!-- Logo -->
-        <a href="student-dashboard.html" class="flex items-center gap-2">
-            <img src="images/logo.png" alt="Logo" class="h-9 w-auto">
-            <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
-                BK Tutor Program
-            </span>
+<header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="flex items-center gap-3 text-blue-800 font-bold text-xl">
+        <img src="images/logo.png" alt="BK Logo" class="h-10 w-auto object-contain">
+        <span>Tutor Program</span>
+    </div>
+    <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+        <a href="student-dashboard.html" class="hover:text-blue-600 transition flex items-center gap-2">
+            <i class="fa-solid fa-border-all"></i> Dashboard
         </a>
-
-        <!-- Navigation -->
-        <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-            <a href="student-dashboard.html"
-               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                Dashboard
-            </a>
-            <a href="student-find-tutor.html"
-               class="text-blue-600 border-b-2 border-blue-600 pb-1">
-                Find a Tutor
-            </a>
-            <a href="student-schedule-upcoming.html"
-               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                My Schedule
-            </a>
-            <a href="student-resources.html"
-               class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                Resources
-            </a>
-        </nav>
-
-        <!-- User Profile -->
-        <div class="flex items-center gap-3">
-            <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
-                🔔
-            </button>
-            <div class="flex items-center gap-2">
-                <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
-                    JD
-                </div>
-                <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
-            </div>
+        <a href="student-find-tutor.html" class="text-blue-600 border-b-2 border-blue-600 pb-4 -mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-magnifying-glass"></i> Find a Tutor
+        </a>
+        <a href="student-schedule-upcoming.html" class="hover:text-blue-600 transition flex items-center gap-2">
+            <i class="fa-regular fa-calendar"></i> My Schedule
+        </a>
+        <a href="student-resources.html" class="hover:text-blue-600 transition flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i> Resources
+        </a>
+    </nav>
+    <div class="flex items-center gap-4">
+        <button class="text-gray-400 hover:text-blue-600" aria-label="Notifications"><i class="fa-regular fa-bell text-lg"></i></button>
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">JD</div>
+            <span class="text-sm font-medium text-gray-600">John Doe</span>
         </div>
     </div>
 </header>
@@ -73,7 +57,7 @@
             </div>
             <div class="space-y-2">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Dr. Jane Smith</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Dr. Jane Smith</h1>
                     <p class="text-sm text-gray-600">Faculty of Computer Science</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3 text-sm">
@@ -100,7 +84,7 @@
 
         <!-- About -->
         <section class="space-y-2">
-            <h2 class="text-lg font-semibold text-gray-900">About</h2>
+            <h2 class="text-lg font-semibold text-gray-800">About</h2>
             <p class="text-sm text-gray-700">
                 Dr. Jane Smith is a professor in the Faculty of Computer Science...
             </p>
@@ -108,7 +92,7 @@
 
         <!-- Education -->
         <section class="space-y-2">
-            <h2 class="text-lg font-semibold text-gray-900">Education</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Education</h2>
             <p class="text-sm text-gray-700">
                 Ph.D. in Computer Science, Stanford University
             </p>
@@ -116,10 +100,10 @@
 
         <!-- Reviews -->
         <section class="space-y-3">
-            <h2 class="text-lg font-semibold text-gray-900">Student Reviews</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Student Reviews</h2>
 
             <div class="border border-gray-100 rounded-lg p-4 space-y-1">
-                <h4 class="text-sm font-semibold text-gray-900 flex flex-wrap items-center gap-2">
+                <h4 class="text-sm font-semibold text-gray-800 flex flex-wrap items-center gap-2">
                     John Doe
                     <span class="text-xs text-gray-400">October 5, 2023</span>
                 </h4>
@@ -130,7 +114,7 @@
             </div>
 
             <div class="border border-gray-100 rounded-lg p-4 space-y-1">
-                <h4 class="text-sm font-semibold text-gray-900 flex flex-wrap items-center gap-2">
+                <h4 class="text-sm font-semibold text-gray-800 flex flex-wrap items-center gap-2">
                     Alice Chen
                     <span class="text-xs text-gray-400">September 28, 2023</span>
                 </h4>
@@ -143,7 +127,7 @@
 
         <!-- Booking Section -->
         <section class="space-y-3">
-            <h2 class="text-lg font-semibold text-gray-900">Book a Session</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Book a Session</h2>
             <form class="space-y-4 max-w-md">
                 <div class="space-y-1">
                     <label for="topic" class="text-sm text-gray-800">Topic/Subject</label>

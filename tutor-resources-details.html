@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - HCMUT Tutor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        function toggleModal() {
+            const modal = document.getElementById('library-modal');
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</head>
+<body class="bg-white font-sans min-h-screen text-gray-800 relative">
+
+    <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center gap-3 text-blue-800 font-bold text-xl">
+            <img src="images/logo.png" alt="BK Logo" class="h-10 w-auto object-contain">
+            <span>Tutor Program</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="tutor-dashboard.html" class="hover:text-blue-600 transition flex items-center gap-2"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+            <a href="tutor-availability.html" class="hover:text-blue-600 transition flex items-center gap-2"><i class="fa-regular fa-calendar"></i> My Schedule</a>
+            <a href="tutor-mentees.html" class="hover:text-blue-600 transition flex items-center gap-2"><i class="fa-solid fa-user-group"></i> My Mentees</a>
+            <a href="tutor-resources.html" class="text-blue-600 border-b-2 border-blue-600 pb-4 -mb-4 flex items-center gap-2"><i class="fa-solid fa-book-open"></i> Resources</a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="text-gray-400 hover:text-blue-600"><i class="fa-regular fa-bell text-lg"></i></button>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">JD</div>
+                <span class="text-sm font-medium text-gray-600">John Doe</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-8">
+        
+        <a href="tutor-resources.html" class="text-gray-500 hover:text-gray-700 text-sm mb-6 flex items-center gap-2 font-medium">
+            <i class="fa-solid fa-arrow-left"></i> Back to Sessions
+        </a>
+
+        <div class="bg-white p-8 rounded-xl border border-gray-200 mb-10 flex justify-between items-start shadow-sm">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">CO3001</h1>
+                <p class="text-gray-500 text-sm mb-4">Software Engineering</p>
+                <p class="text-xs text-gray-400">Session Date: 1/20/2024 at 14:00</p>
+            </div>
+            <button onclick="toggleModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-sm transition flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-plus"></i> Upload Resource
+            </button>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Session Materials</h2>
+                <p class="text-xs text-gray-500">3 resources available</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col relative group">
+                <button class="absolute top-6 right-6 text-red-400 hover:text-red-600 text-xs font-bold bg-red-50 px-3 py-1 rounded-md transition">Remove</button>
+                
+                <div class="flex items-start gap-5 mb-6">
+                    <div class="w-10 flex justify-center pt-1 text-red-500 text-2xl">
+                        <i class="fa-regular fa-file-pdf"></i>
+                    </div>
+                    <div class="flex-1 pr-16">
+                        <h3 class="font-bold text-gray-800 text-base mb-1">Software Engineering Principles - Chapter 1</h3>
+                        <p class="text-xs text-gray-500 mb-3">Introduction to software engineering methodologies and best practices</p>
+                        <div class="flex gap-3 text-[10px] text-gray-400 font-medium uppercase tracking-wide">
+                            <span class="bg-gray-100 px-2 py-0.5 rounded">PDF Document</span>
+                            <span>2.4 MB</span>
+                            <span>Uploaded 1/15/2024</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                        <i class="fa-solid fa-download"></i> Access Resource
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col relative group">
+                <button class="absolute top-6 right-6 text-red-400 hover:text-red-600 text-xs font-bold bg-red-50 px-3 py-1 rounded-md transition">Remove</button>
+                
+                <div class="flex items-start gap-5 mb-6">
+                    <div class="w-10 flex justify-center pt-1 text-purple-500 text-2xl">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <div class="flex-1 pr-16">
+                        <h3 class="font-bold text-gray-800 text-base mb-1">UML Diagrams Tutorial</h3>
+                        <p class="text-xs text-gray-500 mb-3">Comprehensive guide to creating UML diagrams for software design</p>
+                        <div class="flex gap-3 text-[10px] text-gray-400 font-medium uppercase tracking-wide">
+                            <span class="bg-gray-100 px-2 py-0.5 rounded">Video</span>
+                            <span>145 MB</span>
+                            <span>Uploaded 1/16/2024</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                        <i class="fa-solid fa-download"></i> Access Resource
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col relative group">
+                <button class="absolute top-6 right-6 text-red-400 hover:text-red-600 text-xs font-bold bg-red-50 px-3 py-1 rounded-md transition">Remove</button>
+                
+                <div class="flex items-start gap-5 mb-6">
+                    <div class="w-10 flex justify-center pt-1 text-blue-500 text-2xl">
+                        <i class="fa-regular fa-file-lines"></i>
+                    </div>
+                    <div class="flex-1 pr-16">
+                        <h3 class="font-bold text-gray-800 text-base mb-1">Design Patterns Reference</h3>
+                        <p class="text-xs text-gray-500 mb-3">Quick reference guide for common software design patterns</p>
+                        <div class="flex gap-3 text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-2">
+                            <span class="bg-gray-100 px-2 py-0.5 rounded">Document</span>
+                            <span>1.8 MB</span>
+                            <span>Uploaded 1/17/2024</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 italic">By Dr. Nguyen Van A</p>
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                        <i class="fa-solid fa-download"></i> Access Resource
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="library-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-xl w-full max-w-4xl shadow-2xl transform transition-all scale-100">
+            
+            <div class="flex justify-between items-start p-8 border-b border-gray-100 pb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">HCMUT Library Search</h3>
+                    <p class="text-xs text-gray-400 mt-1">Search and add resources to your session</p>
+                </div>
+                <button onclick="toggleModal()" class="text-gray-400 hover:text-gray-600 transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="px-8 pt-8 pb-4">
+                <div class="flex gap-3 mb-6">
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="Search by title, author, or description..." class="w-full pl-4 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white text-sm placeholder-gray-300">
+                    </div>
+                    <div class="w-48">
+                        <select class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white cursor-pointer">
+                            <option>Software Engineering</option>
+                            <option>Computer Science</option>
+                        </select>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-bold transition shadow-sm">Search</button>
+                </div>
+                <p class="text-xs text-gray-400 font-medium mb-4">3 resources found</p>
+            </div>
+
+            <div class="px-8 pb-8 space-y-4 max-h-[400px] overflow-y-auto">
+                
+                <div class="flex justify-between items-center p-5 border border-gray-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition group">
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Advanced Software Architecture</h4>
+                        <p class="text-xs text-gray-500 mt-1 mb-3">Comprehensive guide to modern software architecture patterns</p>
+                        <div class="flex items-center gap-3 text-[10px] text-gray-400">
+                            <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-medium">Software Engineering</span>
+                            <span>By Martin Fowler</span>
+                            <span>3.2 MB</span>
+                            <span>6/15/2023</span>
+                        </div>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-plus"></i> Add to Session
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center p-5 border border-gray-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition group">
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Object-Oriented Design Principles</h4>
+                        <p class="text-xs text-gray-500 mt-1 mb-3">Video series on SOLID principles and design patterns</p>
+                        <div class="flex items-center gap-3 text-[10px] text-gray-400">
+                            <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-medium">Software Engineering</span>
+                            <span>By Robert C. Martin</span>
+                            <span>250 MB</span>
+                            <span>8/20/2023</span>
+                        </div>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-plus"></i> Add to Session
+                    </button>
+                </div>
+
+                <div class="flex justify-between items-center p-5 border border-gray-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/30 transition group">
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-sm">Agile Development Practices</h4>
+                        <p class="text-xs text-gray-500 mt-1 mb-3">Best practices for agile software development teams</p>
+                        <div class="flex items-center gap-3 text-[10px] text-gray-400">
+                            <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded font-medium">Software Engineering</span>
+                            <span>By Ken Schwaber</span>
+                            <span>1.5 MB</span>
+                            <span>9/10/2023</span>
+                        </div>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-sm flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-plus"></i> Add to Session
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -7,51 +7,35 @@
 
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 font-sans font-medium text-gray-700 overflow-y-scroll">
+<body class="bg-white font-sans min-h-screen text-gray-800 overflow-y-scroll">
 
     <!-- Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <a href="student-dashboard.html" class="flex items-center gap-2">
-                <img src="images/logo.png" alt="BK Logo" class="h-9 w-auto">
-                <span class="text-xl sm:text-2xl font-bold tracking-tight text-blue-800">
-                    BK Tutor Program
-                </span>
+    <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3 text-blue-800 font-bold text-xl">
+            <img src="images/logo.png" alt="BK Logo" class="h-10 w-auto object-contain">
+            <span>Tutor Program</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="student-dashboard.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-border-all"></i> Dashboard
             </a>
-
-            <!-- Navigation -->
-            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-                <a href="student-dashboard.html"
-                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    Dashboard
-                </a>
-                <a href="student-find-tutor.html"
-                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    Find a Tutor
-                </a>
-                <a href="student-schedule-upcoming.html"
-                   class="text-gray-600 hover:text-blue-600 hover:border-blue-600 pb-1 border-b-2 border-transparent">
-                    My Schedule
-                </a>
-                <a href="student-resources.html"
-                   class="text-blue-600 border-b-2 border-blue-600 pb-1">
-                    Resources
-                </a>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="flex items-center gap-3">
-                <button class="text-xl leading-none hover:text-blue-600" aria-label="Notifications">
-                    🔔
-                </button>
-                <div class="flex items-center gap-2">
-                    <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-semibold">
-                        JD
-                    </div>
-                    <span class="hidden sm:inline text-sm font-medium text-gray-700">John Doe</span>
-                </div>
+            <a href="student-find-tutor.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass"></i> Find a Tutor
+            </a>
+            <a href="student-schedule-upcoming.html" class="hover:text-blue-600 transition flex items-center gap-2">
+                <i class="fa-regular fa-calendar"></i> My Schedule
+            </a>
+            <a href="student-resources.html" class="text-blue-600 border-b-2 border-blue-600 pb-4 -mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-book-open"></i> Resources
+            </a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <button class="text-gray-400 hover:text-blue-600" aria-label="Notifications"><i class="fa-regular fa-bell text-lg"></i></button>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs">JD</div>
+                <span class="text-sm font-medium text-gray-600">John Doe</span>
             </div>
         </div>
     </header>
@@ -60,7 +44,7 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <!-- Page Title -->
         <section>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Resources</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Resources</h1>
             <p class="text-sm text-gray-500 mt-1">
             </p>
         </section>
@@ -118,7 +102,7 @@
             <!-- Resource Item 1 -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3">
                 <div>
-                    <h4 class="text-base font-semibold text-gray-900">Emma Wilson</h4>
+                    <h4 class="text-base font-semibold text-gray-800">Emma Wilson</h4>
                     <p class="text-sm text-gray-500">Computer Science</p>
                 </div>
                 <div class="text-sm text-gray-700 space-y-1">
@@ -145,7 +129,7 @@
             <!-- Resource Item 2 -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3">
                 <div>
-                    <h4 class="text-base font-semibold text-gray-900">Michael Brown</h4>
+                    <h4 class="text-base font-semibold text-gray-800">Michael Brown</h4>
                     <p class="text-sm text-gray-500">Computer Engineering</p>
                 </div>
                 <div class="text-sm text-gray-700 space-y-1">
