@@ -8,10 +8,28 @@ import { formatDate, formatTimeRange } from "@/lib/format";
 import { sampleSessions } from "@/lib/sample-data";
 import { Session } from "@/types/api";
 
+const upcomingCards = [
+  {
+    sessionId: "session-1",
+    tutor: "Dr. Jane Smith",
+    topic: "CO3001 – Software Engineering",
+    date: "Oct 15, 2023",
+    time: "2:00 PM – 3:30 PM",
+    meetingLink: "https://meet.example.com/session-1",
+  },
+  {
+    sessionId: "session-2",
+    tutor: "Prof. Robert Chen",
+    topic: "CO2003 – Data Structures and Algorithms",
+    date: "Oct 18, 2023",
+    time: "10:00 AM – 11:30 AM",
+    meetingLink: "",
+  },
+];
+
 export default function UpcomingSchedulePage() {
   const { auth } = useAuth();
   const [sessions, setSessions] = useState<Session[]>(sampleSessions);
-  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,25 +48,6 @@ export default function UpcomingSchedulePage() {
     loadSessions();
   }, [auth.token, auth.userId]);
 
-  const handleCancel = async (sessionId: string) => {
-    if (!auth.userId) {
-      setStatus("Provide your userId on login to manage sessions.");
-      return;
-    }
-    try {
-      await api.cancelSession(sessionId, auth.token);
-      setStatus("Session canceled.");
-      setSessions((prev) =>
-        prev.map((s) =>
-          s.sessionId === sessionId ? { ...s, status: "CANCELED" } : s,
-        ),
-      );
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Cancel failed.";
-      setStatus(message);
-    }
-  };
-
   const upcomingSessions = sessions.filter((session) => {
     const start = session.startTime ? new Date(session.startTime) : null;
     return start ? start > new Date() : true;
@@ -56,89 +55,87 @@ export default function UpcomingSchedulePage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">My Schedule</h1>
-        <p className="text-sm text-gray-500">
-          Upcoming sessions and quick actions (cancel/reschedule).
-        </p>
-      </div>
-
-      <div className="flex gap-3 text-sm">
-        <Link
-          href="/student/schedule/upcoming"
-          className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold"
-        >
-          Upcoming
-        </Link>
-        <Link
-          href="/student/schedule/past"
-          className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
-        >
-          Past
-        </Link>
-      </div>
-
-      {status ? (
-        <div className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-          {status}
+        <div className="inline-flex rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <button className="px-4 py-2 text-sm font-semibold bg-blue-700 text-white">List</button>
+          <button className="px-4 py-2 text-sm text-gray-600 hover:text-blue-600">Calendar</button>
         </div>
-      ) : null}
+      </section>
 
-      <div className="space-y-4">
-        {loading ? (
-          <p className="text-sm text-gray-500">Loading sessions...</p>
-        ) : null}
-        {upcomingSessions.map((session) => (
-          <div
-            key={session.sessionId}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3"
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
-                {session.tutor?.fullName
-                  ?.split(" ")
-                  .map((x) => x[0])
-                  .join("")
-                  .slice(0, 2) || "BK"}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-gray-800">
-                  {session.topic || "Mentoring Session"}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {session.tutor?.fullName || "Tutor TBD"}
-                </p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
-                  <span>📅 {formatDate(session.startTime)}</span>
-                  <span>⏰ {formatTimeRange(session.startTime, session.endTime)}</span>
-                  <span>
-                    {session.mode === "IN_PERSON" ? "On campus" : "Online"}{" "}
-                    {session.location ? `• ${session.location}` : ""}
-                  </span>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="border-b border-gray-100 px-4 sm:px-6">
+          <div className="flex gap-6 text-sm">
+            <button className="py-3 border-b-2 border-blue-600 text-blue-600 font-semibold">
+              Upcoming Sessions
+            </button>
+            <Link href="/student/schedule/past" className="py-3 text-gray-500 hover:text-blue-600">
+              Past Sessions
+            </Link>
+          </div>
+        </div>
+
+        <div className="px-4 sm:px-6 py-5 space-y-4">
+          {loading ? (
+            <p className="text-sm text-gray-500">Loading sessions...</p>
+          ) : null}
+          {(upcomingSessions.length ? upcomingSessions : upcomingCards).map((session) => (
+            <div
+              key={session.sessionId}
+              className="border border-gray-100 rounded-xl p-4 sm:p-5 bg-white flex flex-col gap-3"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full border border-gray-300 bg-white" />
+                <div className="flex-1 space-y-1">
+                  <h3 className="text-base font-semibold text-gray-800">
+                    {session.tutor?.fullName || (session as any).tutor || "Tutor TBD"}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {session.topic || (session as any).topic || "Course details coming soon"}
+                  </p>
+                  <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-1">
+                    <span className="flex items-center gap-2">
+                      <i className="fa-regular fa-calendar text-gray-400 text-xs" />
+                      {session.startTime ? formatDate(session.startTime) : (session as any).date}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <i className="fa-regular fa-clock text-gray-400 text-xs" />
+                      {session.startTime
+                        ? formatTimeRange(session.startTime, session.endTime)
+                        : (session as any).time}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded-full">
-                {session.status || "SCHEDULED"}
-              </span>
-            </div>
 
-            <div className="flex flex-wrap gap-2">
-              <a
-                href={session.meetingLink || "#"}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
-              >
-                Join Online
-              </a>
-              <button
-                type="button"
-                onClick={() => handleCancel(session.sessionId)}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition"
-              >
-                Cancel
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                {session.meetingLink ? (
+                  <>
+                    <a
+                      href={session.meetingLink}
+                      className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition text-center"
+                    >
+                      Join Online Meeting
+                    </a>
+                    <button
+                      type="button"
+                      className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition"
+                    >
+                      View Details
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition"
+                  >
+                    View Details
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatDate } from "@/lib/format";
-import { sampleSessions } from "@/lib/sample-data";
 import { Session } from "@/types/api";
 
 const ratings = [
@@ -21,21 +20,21 @@ export default function SessionEvaluationPage() {
   const params = useParams<{ id: string }>();
   const { auth } = useAuth();
   const [scores, setScores] = useState({
-    ratingQuality: 5,
-    communication: 5,
-    punctuality: 5,
-    helpfulness: 5,
-    satisfactionLevel: 5,
+    ratingQuality: 0,
+    communication: 0,
+    punctuality: 0,
+    helpfulness: 0,
+    satisfactionLevel: 0,
   });
   const [comment, setComment] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const session: Session = useMemo(() => {
-    return (
-      sampleSessions.find((item) => item.sessionId === params.id) || sampleSessions[0]
-    );
-  }, [params.id]);
+  const session: Session = {
+    sessionId: params.id || "session",
+    tutor: { userId: "tutor-1", fullName: "Dr. Jane Smith", email: "", role: "TUTOR" },
+    startTime: "2023-10-08T09:00:00Z",
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +76,7 @@ export default function SessionEvaluationPage() {
             <i className="fa-solid fa-xmark text-lg" />
           </Link>
 
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6">
             Session Evaluation
           </h1>
 

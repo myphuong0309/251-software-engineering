@@ -1,107 +1,111 @@
 'use client';
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
-import { formatDate } from "@/lib/format";
-import { sampleResources } from "@/lib/sample-data";
-import { Resource } from "@/types/api";
+import { useParams } from "next/navigation";
+
+const resourceDetails = {
+  code: "CO3001",
+  name: "Software Engineering",
+  sessionDate: "1/20/2024 at 14:00",
+};
+
+const materials = [
+  {
+    id: "pdf-1",
+    icon: "fa-regular fa-file-pdf",
+    iconColor: "text-red-500",
+    title: "Software Engineering Principles - Chapter 1",
+    description: "Introduction to software engineering methodologies and best practices",
+    badges: "PDF Document • 2.4 MB • Uploaded 1/15/2024",
+    author: "",
+  },
+  {
+    id: "vid-1",
+    icon: "fa-solid fa-video",
+    iconColor: "text-purple-500",
+    title: "UML Diagrams Tutorial",
+    description: "Comprehensive guide to creating UML diagrams for software design",
+    badges: "Video • 145 MB • Uploaded 1/16/2024",
+    author: "",
+  },
+  {
+    id: "doc-1",
+    icon: "fa-regular fa-file-lines",
+    iconColor: "text-blue-500",
+    title: "Design Patterns Reference",
+    description: "Quick reference guide for common software design patterns",
+    badges: "Document • 1.8 MB • Uploaded 1/17/2024",
+    author: "By Dr. Nguyen Van A",
+  },
+];
 
 export default function TutorResourceDetailsPage() {
   const params = useParams<{ id: string }>();
-  const router = useRouter();
-  const { auth } = useAuth();
-  const [resource, setResource] = useState<Resource | null>(null);
-  const [status, setStatus] = useState<string | null>(null);
-
-  useEffect(() => {
-    const match = sampleResources.find((res) => res.resourceId === params.id);
-    setResource(match || sampleResources[0]);
-  }, [params.id]);
-
-  const fileBadge = useMemo(() => {
-    if (!resource?.linkURL) return "FILE";
-    if (resource.linkURL.endsWith(".pdf")) return "PDF";
-    if (resource.linkURL.includes("youtube") || resource.linkURL.endsWith(".mp4"))
-      return "VID";
-    return "DOC";
-  }, [resource?.linkURL]);
-
-  const removeResource = async () => {
-    if (!resource) return;
-    try {
-      await api.removeResourceFromSession(resource.resourceId, auth.token);
-      setStatus("Resource removed.");
-      router.push("/tutor/resources");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Remove failed.");
-    }
-  };
-
-  if (!resource) return null;
+  const id = params.id || resourceDetails.code.toLowerCase();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto">
       <Link
         href="/tutor/resources"
-        className="inline-flex items-center text-sm text-blue-700 hover:text-blue-800 mb-2"
+        className="text-gray-500 hover:text-gray-700 text-sm mb-6 flex items-center gap-2 font-medium"
       >
-        ← Back to Resources
+        <i className="fa-solid fa-arrow-left" /> Back to Sessions
       </Link>
 
-      <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4">
-        <header className="space-y-1">
-          <h2 className="text-2xl font-bold text-gray-800">{resource.title}</h2>
-          <p className="text-sm text-gray-700">{resource.session?.topic}</p>
-          <p className="text-sm text-gray-500">
-            Added by {resource.addedByTutor?.fullName || "Tutor"} on{" "}
-            {formatDate(resource.session?.startTime)}
-          </p>
-        </header>
+      <div className="bg-white p-8 rounded-xl border border-gray-200 mb-4 flex justify-between items-start shadow-sm">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">{resourceDetails.code}</h1>
+          <p className="text-gray-500 text-sm mb-4">{resourceDetails.name}</p>
+          <p className="text-xs text-gray-400">Session Date: {resourceDetails.sessionDate}</p>
+        </div>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-sm transition flex items-center gap-2 text-sm">
+          <i className="fa-solid fa-plus" /> Upload Resource
+        </button>
+      </div>
 
-        {status ? (
-          <div className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-            {status}
-          </div>
-        ) : null}
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-lg font-bold text-gray-800 mb-1">Session Materials</h2>
+          <p className="text-xs text-gray-500">3 resources available</p>
+        </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col md:flex-row md:items-center gap-4">
-          <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
-            {fileBadge}
-          </div>
-
-          <div className="flex-1 space-y-1">
-            <p className="text-sm text-gray-600">
-              {resource.description || "Resource shared for the session."}
-            </p>
-            <div className="text-xs text-gray-500 mt-1 flex flex-wrap gap-2">
-              <span>{resource.linkURL ? "Online resource" : "Uploaded file"}</span>
-              <span>•</span>
-              <span>{resource.session?.tutor?.fullName || "Tutor"}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 md:self-stretch">
-            <a
-              href={resource.linkURL || "#"}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
-            >
-              Access Resource
-            </a>
-            <button
-              type="button"
-              onClick={removeResource}
-              className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-red-200 text-red-600 hover:bg-red-50 transition"
-            >
+        {materials.map((material) => (
+          <div
+            key={material.id}
+            className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col relative group"
+          >
+            <button className="absolute top-6 right-6 text-red-400 hover:text-red-600 text-xs font-bold bg-red-50 px-3 py-1 rounded-md transition">
               Remove
             </button>
+
+            <div className="flex items-start gap-5 mb-6">
+              <div className={`w-10 flex justify-center pt-1 ${material.iconColor} text-2xl`}>
+                <i className={material.icon} />
+              </div>
+              <div className="flex-1 pr-16">
+                <h3 className="font-bold text-gray-800 text-base mb-1">{material.title}</h3>
+                <p className="text-xs text-gray-500 mb-3">{material.description}</p>
+                <div className="flex gap-3 text-[10px] text-gray-400 font-medium uppercase tracking-wide mb-2">
+                  {material.badges.split(" • ").map((part) => (
+                    <span key={part} className="bg-gray-100 px-2 py-0.5 rounded">
+                      {part}
+                    </span>
+                  ))}
+                </div>
+                {material.author ? (
+                  <p className="text-[10px] text-gray-400 italic">{material.author}</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center gap-2 transition">
+                <i className="fa-solid fa-download" /> Access Resource
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
     </div>
   );
 }

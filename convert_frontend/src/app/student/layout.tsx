@@ -10,7 +10,7 @@ const navLinks = [
 
 export default function StudentLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="bg-white font-sans min-h-screen text-gray-800 overflow-y-scroll">
+    <div className="bg-white font-sans min-h-screen text-gray-800">
       <RoleHeader links={navLinks} />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</main>
     </div>

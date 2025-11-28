@@ -17,12 +17,10 @@ export default function StudentDashboard() {
   const [sessions, setSessions] = useState<Session[]>(sampleSessions);
   const [matches, setMatches] =
     useState<MatchingRequest[]>(sampleMatchingRequests);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
       if (!auth.userId) return;
-      setLoading(true);
       try {
         const [sessionData, matchData] = await Promise.all([
           api.getSessionsForStudent(auth.userId, auth.token),
@@ -32,8 +30,6 @@ export default function StudentDashboard() {
         if (matchData?.length) setMatches(matchData);
       } catch (error) {
         console.warn("Falling back to sample data", error);
-      } finally {
-        setLoading(false);
       }
     };
     loadData();
@@ -62,11 +58,8 @@ export default function StudentDashboard() {
     <div className="space-y-8">
       <section>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          Welcome back, {auth.fullName || "Student"}!
+          Welcome back, John!
         </h1>
-        {loading ? (
-          <p className="text-sm text-gray-500 mt-1">Loading live data...</p>
-        ) : null}
       </section>
 
       {upcoming ? (
@@ -76,19 +69,15 @@ export default function StudentDashboard() {
           </h2>
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-semibold text-blue-600">
-              {upcoming.tutor?.fullName
-                ?.split(" ")
-                .map((x) => x[0])
-                .join("")
-                .slice(0, 2) || "BK"}
+              JS
             </div>
 
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-gray-800">
-                {upcoming.tutor?.fullName || "TBD Tutor"}
+                Dr. Jane Smith
               </h3>
               <p className="text-sm text-gray-600">
-                {upcoming.topic || "Tutoring session"}
+                CO3001 – Software Engineering
               </p>
               <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
                 <span className="flex items-center gap-1">
@@ -146,33 +135,21 @@ export default function StudentDashboard() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold text-gray-800">Notifications</h2>
           <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-xs font-semibold text-blue-700">
-            Live & sample
+            3 new
           </span>
         </div>
         <ul className="space-y-3 text-sm">
           <li className="flex justify-between gap-4">
-            <span className="text-gray-700">
-              Session request updates show here when you have activity.
-            </span>
-            <span className="text-xs text-gray-400 whitespace-nowrap">
-              Auto-sync
-            </span>
+            <span className="text-gray-700">Your session request with Dr. Smith was accepted</span>
+            <span className="text-xs text-gray-400 whitespace-nowrap">2 hours ago</span>
           </li>
           <li className="flex justify-between gap-4">
-            <span className="text-gray-700">
-              Reminder: Submit feedback after each session.
-            </span>
-            <span className="text-xs text-gray-400 whitespace-nowrap">
-              Sample
-            </span>
+            <span className="text-gray-700">Reminder: Submit feedback for your last session</span>
+            <span className="text-xs text-gray-400 whitespace-nowrap">1 day ago</span>
           </li>
           <li className="flex justify-between gap-4">
-            <span className="text-gray-700">
-              New resource uploads will appear once tutors add them.
-            </span>
-            <span className="text-xs text-gray-400 whitespace-nowrap">
-              Heads up
-            </span>
+            <span className="text-gray-700">New resource added for CO3001</span>
+            <span className="text-xs text-gray-400 whitespace-nowrap">2 days ago</span>
           </li>
         </ul>
       </section>
@@ -183,26 +160,19 @@ export default function StudentDashboard() {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {matchedTutors.map((tutor) => (
-            <div key={tutor.userId} className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
-                {tutor.fullName
-                  ?.split(" ")
-                  .map((x) => x[0])
-                  .join("")
-                  .slice(0, 2)}
-              </div>
-              <div>
-                <h3 className="text-base font-semibold text-gray-800">
-                  {tutor.fullName}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {tutor.expertiseAreas?.join(" • ") ||
-                    "Expert tutor matched to you"}
-                </p>
-              </div>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
+              RC
             </div>
-          ))}
+            <div>
+              <h3 className="text-base font-semibold text-gray-800">
+                Prof. Robert Chen
+              </h3>
+              <p className="text-sm text-gray-600">
+                CO2003 – Data Structures and Algorithms
+              </p>
+            </div>
+          </div>
 
           <Link
             href="/student/schedule/upcoming"

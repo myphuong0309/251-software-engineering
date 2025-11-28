@@ -1,112 +1,92 @@
 'use client';
 
-import { FormEvent, useState } from "react";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
-import { formatDate } from "@/lib/format";
-import { Report, ReportType } from "@/types/api";
-
-const reportTypes: { label: string; value: ReportType }[] = [
-  { label: "Session History", value: "SESSION_HISTORY" },
-  { label: "Tutor Performance", value: "TUTOR_PERFORMANCE" },
-  { label: "Student Activity", value: "STUDENT_ACTIVITY" },
-];
-
 export default function ReportsPage() {
-  const { auth } = useAuth();
-  const [selected, setSelected] = useState<ReportType>("SESSION_HISTORY");
-  const [reports, setReports] = useState<Report[]>([]);
-  const [status, setStatus] = useState<string | null>(null);
-
-  const generate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const report = await api.generateReport(
-        {
-          type: selected,
-          generatedDate: new Date().toISOString(),
-          content: "Auto-generated from frontend",
-        },
-        auth.token,
-      );
-      setReports((prev) => [report, ...prev]);
-      setStatus("Report generated successfully.");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Report generation failed.");
-    }
-  };
-
   return (
-    <div className="space-y-6">
-      <header className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Reports & Analytics</h2>
-          <p className="text-gray-500 text-sm mt-1">
-            Generate program-wide reports for monitoring.
-          </p>
+    <div className="space-y-8">
+      <header className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-800">Reports</h2>
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 bg-white border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 transition">
+            <i className="fa-solid fa-filter" /> Filter
+          </button>
+          <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+            <i className="fa-solid fa-download" /> Export
+          </button>
+          <div className="h-8 w-px bg-gray-300 mx-2" />
+          <button className="text-gray-400 hover:text-blue-600">
+            <i className="fa-solid fa-bell text-xl" />
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
+              JD
+            </div>
+            <span className="text-sm font-medium text-gray-700">John Doe</span>
+          </div>
         </div>
       </header>
 
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <form className="flex flex-col sm:flex-row gap-4 items-end" onSubmit={generate}>
-          <div className="space-y-1 flex-1">
-            <label className="text-sm text-gray-700">Report type</label>
-            <select
-              value={selected}
-              onChange={(e) => setSelected(e.target.value as ReportType)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-            >
-              {reportTypes.map((type) => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
-          >
-            Generate
-          </button>
-        </form>
-        {status ? (
-          <p className="text-sm text-blue-700 bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 mt-3">
-            {status}
-          </p>
-        ) : null}
-      </section>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <ChartCard title="Sessions by Status" />
+        <ChartCard title="Sessions by Course" />
+      </div>
 
-      <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Reports</h3>
-        <div className="space-y-3">
-          {reports.map((report) => (
-            <div
-              key={report.reportId}
-              className="border border-gray-100 rounded-lg p-4 flex items-center justify-between"
-            >
-              <div>
-                <p className="text-sm font-semibold text-gray-800">
-                  {report.type?.replaceAll("_", " ")}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {formatDate(report.generatedDate)}
-                </p>
-              </div>
-              <a
-                className="text-blue-700 hover:text-blue-800 text-sm font-semibold"
-                href="#"
-                onClick={(e) => e.preventDefault()}
-              >
-                View
-              </a>
-            </div>
-          ))}
-          {!reports.length ? (
-            <p className="text-sm text-gray-500">No reports generated yet.</p>
-          ) : null}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h3 className="font-bold text-gray-800 text-lg">Recent Reports</h3>
+          <a href="#" className="text-blue-600 text-sm font-medium hover:underline">
+            View All
+          </a>
         </div>
-      </section>
+
+        <table className="w-full text-left">
+          <thead>
+            <tr className="bg-gray-50 text-xs text-gray-500 uppercase font-semibold">
+              <th className="px-6 py-4">Report Name</th>
+              <th className="px-6 py-4">Generated By</th>
+              <th className="px-6 py-4">Date</th>
+              <th className="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100 text-sm">
+            {[
+              { name: "Monthly Session Summary", date: "Oct 14, 2023" },
+              { name: "Tutor Performance Report", date: "Oct 10, 2023" },
+              { name: "Student Attendance Report", date: "Oct 5, 2023" },
+            ].map((report) => (
+              <tr key={report.name} className="hover:bg-gray-50 transition">
+                <td className="px-6 py-4 font-medium text-gray-800">{report.name}</td>
+                <td className="px-6 py-4 text-gray-500">John Doe</td>
+                <td className="px-6 py-4 text-gray-500">{report.date}</td>
+                <td className="px-6 py-4 text-right space-x-3">
+                  <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                    View
+                  </a>
+                  <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+                    Download
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function ChartCard({ title }: { title: string }) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-80 flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-semibold text-gray-800">{title}</h3>
+        <a href="#" className="text-blue-600 text-sm hover:underline">
+          View Details
+        </a>
+      </div>
+      <div className="flex-1 flex flex-col items-center justify-center text-gray-300">
+        <i className="fa-solid fa-chart-column text-5xl mb-3 opacity-50" />
+        <p className="text-sm font-medium">Chart visualization would appear here</p>
+      </div>
     </div>
   );
 }

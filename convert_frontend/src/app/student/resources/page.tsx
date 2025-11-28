@@ -1,50 +1,36 @@
 'use client';
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { sampleResources } from "@/lib/sample-data";
-import { formatRelative } from "@/lib/format";
+import { useState } from "react";
+
+const resourceCards = [
+  {
+    id: "co3001",
+    name: "Emma Wilson",
+    major: "Computer Science",
+    subjects: "Software Engineering",
+    sessions: "8 completed",
+    last: "2 days ago",
+  },
+  {
+    id: "co2003",
+    name: "Michael Brown",
+    major: "Computer Engineering",
+    subjects: "Data Structures and Algorithms",
+    sessions: "12 completed",
+    last: "Yesterday",
+  },
+];
 
 export default function StudentResourcesPage() {
   const [search, setSearch] = useState("");
   const [sessionFilter, setSessionFilter] = useState("All Sessions");
   const [typeFilter, setTypeFilter] = useState("All Types");
 
-  const groups = useMemo(() => {
-    const grouped = sampleResources.reduce((acc, resource) => {
-      const sessionId = resource.session?.sessionId || "general";
-      if (!acc[sessionId]) {
-        acc[sessionId] = {
-          sessionId,
-          tutor: resource.session?.tutor?.fullName || "Unknown tutor",
-          subject: resource.session?.topic || "General",
-          resources: [] as typeof sampleResources,
-        };
-      }
-      acc[sessionId].resources.push(resource);
-      return acc;
-    }, {} as Record<string, { sessionId: string; tutor: string; subject: string; resources: typeof sampleResources }>);
-
-    return Object.values(grouped);
-  }, []);
-
-  const filtered = groups.filter((group) => {
-    const matchesSearch =
-      group.tutor.toLowerCase().includes(search.toLowerCase()) ||
-      group.subject.toLowerCase().includes(search.toLowerCase());
-    const matchesSession =
-      sessionFilter === "All Sessions" || group.subject.includes(sessionFilter);
-    const matchesType = typeFilter === "All Types" || typeFilter === "PDF";
-    return matchesSearch && matchesSession && matchesType;
-  });
-
   return (
     <div className="space-y-6">
       <section>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Resources</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Browse study materials linked to your sessions. Live data loads per session ID.
-        </p>
       </section>
 
       <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -74,9 +60,8 @@ export default function StudentResourcesPage() {
               onChange={(e) => setSessionFilter(e.target.value)}
             >
               <option>All Sessions</option>
-              {groups.map((group) => (
-                <option key={group.sessionId}>{group.subject}</option>
-              ))}
+              <option>Recent Sessions</option>
+              <option>Last 7 days</option>
             </select>
           </div>
 
@@ -99,33 +84,34 @@ export default function StudentResourcesPage() {
         </form>
       </section>
 
-      <p className="text-sm text-gray-500">
-        {filtered.length} session{filtered.length !== 1 ? "s" : ""} found
-      </p>
+      <p className="text-sm text-gray-500">5 sessions found</p>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filtered.map((group) => (
+        {resourceCards.map((resource) => (
           <div
-            key={group.sessionId}
+            key={resource.id}
             className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3"
           >
             <div>
-              <h4 className="text-base font-semibold text-gray-800">{group.tutor}</h4>
-              <p className="text-sm text-gray-500">{group.subject}</p>
+              <h4 className="text-base font-semibold text-gray-800">{resource.name}</h4>
+              <p className="text-sm text-gray-500">{resource.major}</p>
             </div>
             <div className="text-sm text-gray-700 space-y-1">
               <p>
-                <span className="font-semibold">Resources:</span>{" "}
-                <span>{group.resources.length} linked items</span>
+                <span className="font-semibold">Subjects:</span>
+                <span> {resource.subjects}</span>
               </p>
               <p>
-                <span className="font-semibold">Last upload:</span>{" "}
-                <span>{formatRelative(group.resources[0]?.session?.startTime)}</span>
+                <span className="font-semibold">Sessions:</span>
+                <span> {resource.sessions}</span>
+                <span className="mx-1 text-gray-400">•</span>
+                <span className="font-semibold">Last:</span>
+                <span> {resource.last}</span>
               </p>
             </div>
             <div className="mt-2">
               <Link
-                href={`/student/resources/${group.sessionId}`}
+                href={`/student/resources/${resource.id}`}
                 className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
               >
                 Select

@@ -60,6 +60,17 @@ export const sampleSessions: Session[] = [
     meetingLink: "https://meet.example.com/session-1",
   },
   {
+    sessionId: "session-4",
+    topic: "CO3010 – Software Project",
+    startTime: toISO(new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000)),
+    endTime: toISO(new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000)),
+    duration: 60,
+    mode: "ONLINE" as SessionMode,
+    status: "SCHEDULED" as SessionStatus,
+    tutor: sampleTutors[1],
+    student: sampleStudent,
+  },
+  {
     sessionId: "session-2",
     topic: "CO2003 – Data Structures",
     startTime: toISO(new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)),
@@ -70,6 +81,20 @@ export const sampleSessions: Session[] = [
     tutor: sampleTutors[1],
     student: sampleStudent,
     location: "Room B1-301",
+  },
+  {
+    sessionId: "session-3",
+    topic: "CO1001 – Introduction to Programming",
+    startTime: toISO(new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000)),
+    endTime: toISO(new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000)),
+    duration: 60,
+    mode: "ONLINE" as SessionMode,
+    status: "COMPLETED" as SessionStatus,
+    tutor: sampleTutors[0],
+    student: sampleStudent,
+    meetingLink: "https://meet.example.com/session-3",
+    evaluationId: "evaluation-3",
+    evaluationSubmitted: true,
   },
 ];
 

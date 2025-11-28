@@ -8,7 +8,7 @@ Next.js (App Router) + Tailwind CSS UI for the BK Tutor Program. Mirrors the ori
 
 ### Setup & Run
 ```bash
-cd frontend
+cd convert_frontend
 cp .env.local.example .env.local   # adjust NEXT_PUBLIC_API_BASE_URL if backend not on http://localhost:8080/api
 npm install
 npm run dev -- --hostname 0.0.0.0 --port 3000
@@ -19,7 +19,7 @@ Open http://localhost:3000 to view.
 - Login: `/`
 - Student: `/student` (dashboard), `/student/find-tutor`, `/student/tutor/:id`, `/student/schedule/upcoming`, `/student/schedule/past`, `/student/session/:id/evaluation`, `/student/resources`, `/student/resources/:id`
 - Tutor: `/tutor` (dashboard), `/tutor/availability`, `/tutor/mentees`, `/tutor/resources`, `/tutor/resources/:id`
-- Coordinator: `/coordinator/meeting-management`, `/coordinator/users-management`, `/coordinator/reports`
+- Coordinator: `/coordinator/meeting-management` (redirects from `/coordinator`), `/coordinator/users-management`, `/coordinator/reports`
 
 ### Project Map
 - `src/app/page.tsx` – login/role selection.

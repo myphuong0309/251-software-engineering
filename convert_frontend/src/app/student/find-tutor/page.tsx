@@ -2,18 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
 import { sampleTutors } from "@/lib/sample-data";
-import { Tutor } from "@/types/api";
 
 export default function FindTutorPage() {
-  const { auth } = useAuth();
   const [query, setQuery] = useState("");
   const [subject, setSubject] = useState("All Subjects");
   const [date, setDate] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
 
   const filteredTutors = useMemo(() => {
     return sampleTutors.filter((tutor) => {
@@ -31,39 +25,11 @@ export default function FindTutorPage() {
     });
   }, [query, subject]);
 
-  const handleRequest = async (tutor: Tutor) => {
-    setMessage(null);
-    if (!auth.userId) {
-      setMessage("Please add your userId on the login page to submit a request.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      await api.createMatchingRequest(
-        {
-          student: { userId: auth.userId, fullName: auth.fullName || "Student" },
-          tutor: { userId: tutor.userId, fullName: tutor.fullName },
-          subject:
-            subject === "All Subjects" ? "General mentoring" : subject || "Mentoring",
-          preferredTimeSlots: date ? [new Date(date).toISOString()] : undefined,
-        },
-        auth.token,
-      );
-      setMessage("Request sent to the coordinator and tutor.");
-    } catch (error) {
-      const text = error instanceof Error ? error.message : "Request failed.";
-      setMessage(text);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="space-y-8">
       <section>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Find a Tutor</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Search tutors by subject, then send a matching request that goes to the backend.
         </p>
       </section>
 
@@ -134,12 +100,6 @@ export default function FindTutorPage() {
         </form>
       </section>
 
-      {message ? (
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-lg px-4 py-3">
-          {message}
-        </div>
-      ) : null}
-
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredTutors.map((tutor) => (
           <div
@@ -174,22 +134,12 @@ export default function FindTutorPage() {
                 </span>
               ))}
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href={`/student/tutor/${tutor.userId}`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition mt-2"
-              >
-                View Profile
-              </Link>
-              <button
-                type="button"
-                onClick={() => handleRequest(tutor)}
-                disabled={submitting}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition mt-2 disabled:opacity-60"
-              >
-                {submitting ? "Sending..." : "Request Match"}
-              </button>
-            </div>
+            <Link
+              href={`/student/tutor/${tutor.userId}`}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition mt-2 self-start"
+            >
+              View Profile
+            </Link>
           </div>
         ))}
       </section>

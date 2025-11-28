@@ -24,7 +24,10 @@ const navItems = [
 
 function SidebarLink({ href, icon, label }: { href: string; icon: string; label: string }) {
   const pathname = usePathname();
-  const active = pathname.startsWith(href);
+  const active =
+    href === "/coordinator"
+      ? pathname === "/coordinator"
+      : pathname === href || pathname.startsWith(`${href}/`);
   return (
     <Link
       href={href}

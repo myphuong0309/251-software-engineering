@@ -3,9 +3,9 @@ export type Role = "STUDENT" | "TUTOR" | "COORDINATOR";
 export interface User {
   userId: string;
   fullName: string;
-  email: string;
+  email?: string;
   phoneNumber?: string;
-  role: Role;
+  role?: Role;
   ssoToken?: string;
   isActive?: boolean;
 }
@@ -42,6 +42,8 @@ export interface Session {
   duration?: number;
   mode?: SessionMode;
   status?: SessionStatus;
+  evaluationId?: string;
+  evaluationSubmitted?: boolean;
 }
 
 export type AvailabilityStatus = "AVAILABLE" | "BOOKED";

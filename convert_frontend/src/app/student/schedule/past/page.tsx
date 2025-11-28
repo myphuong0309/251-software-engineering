@@ -8,6 +8,25 @@ import { formatDate, formatTimeRange } from "@/lib/format";
 import { sampleSessions } from "@/lib/sample-data";
 import { Session } from "@/types/api";
 
+const pastCards = [
+  {
+    sessionId: "past-1",
+    tutor: "Dr. Jane Smith",
+    topic: "CO3001 – Software Engineering",
+    date: "Oct 8, 2023",
+    time: "2:00 PM – 3:30 PM",
+    evaluationSubmitted: true,
+  },
+  {
+    sessionId: "past-2",
+    tutor: "Prof. Robert Chen",
+    topic: "CO2003 – Data Structures and Algorithms",
+    date: "Oct 5, 2023",
+    time: "10:00 AM – 11:30 AM",
+    evaluationSubmitted: false,
+  },
+];
+
 export default function PastSchedulePage() {
   const { auth } = useAuth();
   const [sessions, setSessions] = useState<Session[]>(sampleSessions);
@@ -36,77 +55,85 @@ export default function PastSchedulePage() {
 
   return (
     <div className="space-y-6">
-      <div>
+      <section className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">My Schedule</h1>
-        <p className="text-sm text-gray-500">Past sessions and follow-up actions.</p>
-      </div>
+        <div className="inline-flex rounded-lg border border-gray-200 bg-white overflow-hidden">
+          <button className="px-4 py-2 text-sm font-semibold bg-blue-700 text-white">List</button>
+          <button className="px-4 py-2 text-sm text-gray-600 hover:text-blue-600">Calendar</button>
+        </div>
+      </section>
 
-      <div className="flex gap-3 text-sm">
-        <Link
-          href="/student/schedule/upcoming"
-          className="px-3 py-1 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
-        >
-          Upcoming
-        </Link>
-        <Link
-          href="/student/schedule/past"
-          className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold"
-        >
-          Past
-        </Link>
-      </div>
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="border-b border-gray-100 px-4 sm:px-6">
+          <div className="flex gap-6 text-sm">
+            <Link
+              href="/student/schedule/upcoming"
+              className="py-3 text-gray-500 hover:text-blue-600"
+            >
+              Upcoming Sessions
+            </Link>
+            <button className="py-3 border-b-2 border-blue-600 text-blue-600 font-semibold">
+              Past Sessions
+            </button>
+          </div>
+        </div>
 
-      <div className="space-y-4">
-        {loading ? (
-          <p className="text-sm text-gray-500">Loading sessions...</p>
-        ) : null}
-        {pastSessions.map((session) => (
-          <div
-            key={session.sessionId}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col gap-3"
-          >
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
-                {session.tutor?.fullName
-                  ?.split(" ")
-                  .map((x) => x[0])
-                  .join("")
-                  .slice(0, 2) || "BK"}
-              </div>
-              <div className="flex-1">
-                <h3 className="text-base font-semibold text-gray-800">
-                  {session.topic || "Completed Session"}
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {session.tutor?.fullName || "Tutor TBD"}
-                </p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
-                  <span>📅 {formatDate(session.startTime)}</span>
-                  <span>⏰ {formatTimeRange(session.startTime, session.endTime)}</span>
-                  <span>{session.mode === "IN_PERSON" ? "On campus" : "Online"}</span>
+        <div className="px-4 sm:px-6 py-5 space-y-4">
+          {loading ? (
+            <p className="text-sm text-gray-500">Loading sessions...</p>
+          ) : null}
+          {(pastSessions.length ? pastSessions : (pastCards as unknown as Session[])).map((session) => {
+            const evaluated = Boolean(session.evaluationSubmitted || session.evaluationId);
+            return (
+              <div
+                key={session.sessionId}
+                className="border border-gray-100 rounded-xl p-4 sm:p-5 bg-white flex flex-col gap-3"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full border border-gray-300 bg-white" />
+                  <div className="flex-1 space-y-1">
+                    <h3 className="text-base font-semibold text-gray-800">
+                      {session.tutor?.fullName || "Tutor TBD"}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {session.topic || (session as any).topic || "Completed Session"}
+                    </p>
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-1">
+                      <span className="flex items-center gap-2">
+                        <i className="fa-regular fa-calendar text-gray-400 text-xs" />
+                        {session.startTime ? formatDate(session.startTime) : (session as any).date}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <i className="fa-regular fa-clock text-gray-400 text-xs" />
+                        {session.startTime
+                          ? formatTimeRange(session.startTime, session.endTime)
+                          : (session as any).time}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex pt-2">
+                  {evaluated ? (
+                    <Link
+                      href={`/student/session/${session.sessionId}/evaluation`}
+                      className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition text-center"
+                    >
+                      View Evaluation
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/student/session/${session.sessionId}/evaluation`}
+                      className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition text-center"
+                    >
+                      Evaluate Session
+                    </Link>
+                  )}
                 </div>
               </div>
-              <span className="text-xs font-semibold text-green-700 bg-green-50 px-2 py-1 rounded-full">
-                {session.status || "COMPLETED"}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href={`/student/session/${session.sessionId}/evaluation`}
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
-              >
-                Evaluate Session
-              </Link>
-              <Link
-                href="/student/resources"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 transition"
-              >
-                View Resources
-              </Link>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
