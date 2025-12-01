@@ -2,18 +2,36 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
-import { sampleTutors } from "@/lib/sample-data";
+import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/api";
 import { Tutor } from "@/types/api";
 
 export default function TutorProfilePage() {
   const params = useParams<{ id: string }>();
+  const [tutor, setTutor] = useState<Tutor | null>(null);
 
-  const tutor: Tutor = useMemo(() => {
-    return (
-      sampleTutors.find((item) => item.userId === params.id) || sampleTutors[0]
-    );
+  useEffect(() => {
+    const loadTutor = async () => {
+      try {
+        const data = await api.getTutorById(params.id);
+        setTutor(data || null);
+      } catch (error) {
+        console.warn("Unable to load tutor", error);
+        setTutor(null);
+      }
+    };
+    if (params.id) loadTutor();
   }, [params.id]);
+
+  const initials = useMemo(
+    () =>
+      (tutor?.fullName || "Tutor")
+        .split(" ")
+        .map((part) => part[0])
+        .join("")
+        .slice(0, 2),
+    [tutor?.fullName],
+  );
 
   return (
     <div className="space-y-6">
@@ -27,22 +45,18 @@ export default function TutorProfilePage() {
       <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
         <header className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-semibold text-blue-700">
-            {tutor.fullName
-              ?.split(" ")
-              .map((part) => part[0])
-              .join("")
-              .slice(0, 2)}
+            {initials}
           </div>
           <div className="space-y-2">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-                Dr. Jane Smith
+                {tutor?.fullName || "Tutor"}
               </h1>
               <p className="text-sm text-gray-600">Faculty of Computer Science</p>
             </div>
             <div className="flex flex-wrap items-center gap-3 text-sm">
               <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-yellow-50 text-yellow-600 text-xs font-semibold">
-                ★ 4.8
+                ★ {tutor?.averageRating?.toFixed(1) || "4.5"}
               </span>
               <span className="text-gray-500">2 reviews</span>
             </div>
@@ -50,21 +64,24 @@ export default function TutorProfilePage() {
         </header>
 
         <div className="flex flex-wrap gap-2 text-xs">
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700">
-            Java
-          </span>
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700">
-            Databases
-          </span>
-          <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700">
-            Software Engineering
-          </span>
+          {tutor?.expertiseAreas?.length ? (
+            tutor.expertiseAreas.map((area) => (
+              <span
+                key={area}
+                className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-700"
+              >
+                {area}
+              </span>
+            ))
+          ) : (
+            <span className="text-xs text-gray-500">No expertise areas listed.</span>
+          )}
         </div>
 
         <section className="space-y-2">
           <h2 className="text-lg font-semibold text-gray-800">About</h2>
           <p className="text-sm text-gray-700">
-            Dr. Jane Smith is a professor in the Faculty of Computer Science...
+            {tutor?.biography || "Biography will be added soon."}
           </p>
         </section>
 

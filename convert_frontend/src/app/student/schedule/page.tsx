@@ -1,5 +1,14 @@
-import { redirect } from "next/navigation";
+'use client';
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function StudentScheduleIndex() {
-  redirect("/student/schedule/upcoming");
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/student/schedule/upcoming");
+  }, [router]);
+
+  return null;
 }

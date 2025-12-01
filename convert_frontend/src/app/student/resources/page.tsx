@@ -1,31 +1,39 @@
 'use client';
 
 import Link from "next/link";
-import { useState } from "react";
-
-const resourceCards = [
-  {
-    id: "co3001",
-    name: "Emma Wilson",
-    major: "Computer Science",
-    subjects: "Software Engineering",
-    sessions: "8 completed",
-    last: "2 days ago",
-  },
-  {
-    id: "co2003",
-    name: "Michael Brown",
-    major: "Computer Engineering",
-    subjects: "Data Structures and Algorithms",
-    sessions: "12 completed",
-    last: "Yesterday",
-  },
-];
+import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/api";
+import { Resource } from "@/types/api";
 
 export default function StudentResourcesPage() {
   const [search, setSearch] = useState("");
   const [sessionFilter, setSessionFilter] = useState("All Sessions");
   const [typeFilter, setTypeFilter] = useState("All Types");
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      setError(null);
+      try {
+        const data = await api.getResources();
+        setResources(data || []);
+      } catch (err) {
+        console.warn("Unable to load resources", err);
+        setError("Unable to load resources right now.");
+      }
+    };
+    load();
+  }, []);
+
+  const filtered = useMemo(() => {
+    return resources.filter((res) => {
+      const matchesSearch =
+        res.title?.toLowerCase().includes(search.toLowerCase()) ||
+        res.description?.toLowerCase().includes(search.toLowerCase());
+      return matchesSearch;
+    });
+  }, [resources, search]);
 
   return (
     <div className="space-y-6">
@@ -84,34 +92,33 @@ export default function StudentResourcesPage() {
         </form>
       </section>
 
-      <p className="text-sm text-gray-500">5 sessions found</p>
+      {error ? (
+        <p className="text-sm text-red-600">{error}</p>
+      ) : (
+        <p className="text-sm text-gray-500">
+          {filtered.length} resources found
+        </p>
+      )}
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {resourceCards.map((resource) => (
+        {filtered.map((resource) => (
           <div
-            key={resource.id}
+            key={resource.resourceId}
             className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3"
           >
             <div>
-              <h4 className="text-base font-semibold text-gray-800">{resource.name}</h4>
-              <p className="text-sm text-gray-500">{resource.major}</p>
+              <h4 className="text-base font-semibold text-gray-800">{resource.title}</h4>
+              <p className="text-sm text-gray-500">{resource.description}</p>
             </div>
             <div className="text-sm text-gray-700 space-y-1">
               <p>
-                <span className="font-semibold">Subjects:</span>
-                <span> {resource.subjects}</span>
-              </p>
-              <p>
-                <span className="font-semibold">Sessions:</span>
-                <span> {resource.sessions}</span>
-                <span className="mx-1 text-gray-400">•</span>
-                <span className="font-semibold">Last:</span>
-                <span> {resource.last}</span>
+                <span className="font-semibold">Session:</span>{" "}
+                <span>{resource.session?.topic || resource.session?.sessionId || "N/A"}</span>
               </p>
             </div>
             <div className="mt-2">
               <Link
-                href={`/student/resources/${resource.id}`}
+                href={`/student/resources/${resource.resourceId}`}
                 className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-700 text-white hover:bg-blue-800 transition"
               >
                 Select

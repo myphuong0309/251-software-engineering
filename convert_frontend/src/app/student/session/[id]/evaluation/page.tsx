@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatDate } from "@/lib/format";
@@ -19,6 +19,7 @@ const ratings = [
 export default function SessionEvaluationPage() {
   const params = useParams<{ id: string }>();
   const { auth } = useAuth();
+  const [session, setSession] = useState<Session | null>(null);
   const [scores, setScores] = useState({
     ratingQuality: 0,
     communication: 0,
@@ -30,17 +31,28 @@ export default function SessionEvaluationPage() {
   const [status, setStatus] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const session: Session = {
-    sessionId: params.id || "session",
-    tutor: { userId: "tutor-1", fullName: "Dr. Jane Smith", email: "", role: "TUTOR" },
-    startTime: "2023-10-08T09:00:00Z",
-  };
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await api.getSessionById(params.id);
+        setSession(data || null);
+      } catch (err) {
+        console.warn("Unable to load session for evaluation", err);
+        setSession(null);
+      }
+    };
+    if (params.id) load();
+  }, [params.id]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus(null);
     if (!auth.userId) {
       setStatus("Add your userId on login to submit an evaluation.");
+      return;
+    }
+    if (!session) {
+      setStatus("Session not found.");
       return;
     }
     setSubmitting(true);
@@ -82,8 +94,10 @@ export default function SessionEvaluationPage() {
 
           <p className="text-sm sm:text-base text-gray-700 mb-6">
             Feedback for your session with{" "}
-            <span className="font-semibold">{session.tutor?.fullName || "Tutor"}</span> on{" "}
-            <span className="font-semibold">{formatDate(session.startTime)}</span>
+            <span className="font-semibold">{session?.tutor?.fullName || "Tutor"}</span> on{" "}
+            <span className="font-semibold">
+              {session?.startTime ? formatDate(session.startTime) : "Date TBD"}
+            </span>
           </p>
 
           <form onSubmit={handleSubmit}>

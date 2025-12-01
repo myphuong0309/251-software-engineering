@@ -1,77 +1,89 @@
 'use client';
 
 import Link from "next/link";
-
-const pendingRequests = [
-  {
-    student: "Emma Wilson",
-    subject: "CO3001 - Software Engineering",
-    time: "Oct 15, 2023 , 14:00 - 15:30",
-  },
-  {
-    student: "Alex Chen",
-    subject: "CO2013 - Database Systems",
-    time: "Oct 16, 2023 , 10:00 - 11:30",
-  },
-];
-
-const upcomingSessions = [
-  {
-    student: "Michael Brown",
-    topic: "CO3005 - Principles of Programming Languages",
-    when: "Today , 16:00 - 17:30",
-    mode: "Online",
-    showJoin: true,
-  },
-  {
-    student: "Sophia Davis",
-    topic: "CO3001 - Data Structures and Algorithms",
-    when: "Tomorrow , 09:00 - 10:30",
-    mode: "In-Person",
-    showJoin: false,
-  },
-  {
-    student: "James Wilson",
-    topic: "CO3001 - Software Engineering",
-    when: "Oct 14, 2023 , 13:00 - 14:30",
-    mode: "Online",
-    showJoin: true,
-  },
-];
-
-const metrics = [
-  { label: "Teaching Quality", value: 4.9 },
-  { label: "Communication", value: 4.7 },
-  { label: "Punctuality", value: 5.0 },
-];
-
-const weekStats = [
-  { icon: "fa-regular fa-clock", title: "Hours", value: "12.5", color: "text-blue-600", background: "bg-blue-50" },
-  { icon: "fa-regular fa-user", title: "Students", value: "7", color: "text-green-600", background: "bg-green-50" },
-  { icon: "fa-solid fa-chart-line", title: "Sessions", value: "9", color: "text-purple-600", background: "bg-purple-50" },
-  { icon: "fa-regular fa-calendar", title: "Upcoming", value: "3", color: "text-yellow-600", background: "bg-yellow-50" },
-];
+import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/api";
+import { MatchingRequest, Session } from "@/types/api";
 
 export default function TutorDashboard() {
+  const tutorId = "tutor-1";
+  const [pending, setPending] = useState<MatchingRequest[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const [reqs, sess] = await Promise.all([
+          api.getMatchingRequestsForTutor(tutorId),
+          api.getSessionsForTutor(tutorId),
+        ]);
+        setPending((reqs || []).filter((r) => r.status === "PENDING"));
+        setSessions(sess || []);
+      } catch (err) {
+        console.warn("Unable to load tutor dashboard data", err);
+        setError("Unable to load latest data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const upcomingSessions = useMemo(() => {
+    return sessions
+      .filter((s) => s.startTime && new Date(s.startTime) > new Date())
+      .sort(
+        (a, b) =>
+          new Date(a.startTime || 0).getTime() -
+          new Date(b.startTime || 0).getTime(),
+      );
+  }, [sessions]);
+
+  const metrics = useMemo(() => {
+    const completed = sessions.filter((s) => s.status === "COMPLETED");
+    return [
+      { label: "Teaching Quality", value: 4.8 },
+      { label: "Communication", value: 4.7 },
+      { label: "Punctuality", value: 5.0 },
+      { label: "Completed Sessions", value: completed.length },
+    ];
+  }, [sessions]);
+
+  const weekStats = useMemo(() => {
+    return [
+      { icon: "fa-regular fa-clock", title: "Hours", value: `${sessions.length * 1.5}`, color: "text-blue-600", background: "bg-blue-50" },
+      { icon: "fa-regular fa-user", title: "Students", value: `${new Set(sessions.map((s) => s.student?.userId)).size}`, color: "text-green-600", background: "bg-green-50" },
+      { icon: "fa-solid fa-chart-line", title: "Sessions", value: `${sessions.length}`, color: "text-purple-600", background: "bg-purple-50" },
+      { icon: "fa-regular fa-calendar", title: "Upcoming", value: `${upcomingSessions.length}`, color: "text-yellow-600", background: "bg-yellow-50" },
+    ];
+  }, [sessions, upcomingSessions]);
+
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Tutor Dashboard</h1>
+      {loading ? <p className="text-sm text-gray-500">Loading...</p> : null}
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
       <section className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
         <h2 className="text-base font-bold text-gray-700 mb-1">Pending Session Requests</h2>
         <p className="text-xs text-gray-400 mb-6">Review and respond to student requests</p>
 
         <div className="space-y-6">
-          {pendingRequests.map((request) => (
+          {pending.length === 0 ? <p className="text-sm text-gray-500">No pending requests.</p> : null}
+          {pending.map((request) => (
             <div
-              key={request.student}
+              key={request.requestId}
               className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-6 last:border-0 last:pb-0"
             >
               <div>
-                <p className="font-bold text-gray-800 text-sm">{request.student}</p>
+                <p className="font-bold text-gray-800 text-sm">{request.student?.fullName || "Student"}</p>
                 <p className="text-xs text-gray-400 mt-1">{request.subject}</p>
                 <p className="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                  <i className="fa-regular fa-calendar text-gray-400" /> {request.time}
+                  <i className="fa-regular fa-calendar text-gray-400" /> {request.preferredTimeSlots?.[0] || "Preferred time TBD"}
                 </p>
               </div>
               <div className="flex gap-3 mt-3 md:mt-0">
@@ -92,25 +104,26 @@ export default function TutorDashboard() {
         <p className="text-xs text-gray-400 mb-6">Your scheduled tutoring sessions</p>
 
         <div className="space-y-6">
+          {upcomingSessions.length === 0 ? <p className="text-sm text-gray-500">No upcoming sessions.</p> : null}
           {upcomingSessions.map((session) => (
             <div
-              key={session.student + session.when}
+              key={session.sessionId}
               className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-100 pb-6 last:border-0 last:pb-0"
             >
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="font-bold text-gray-800 text-sm">{session.student}</p>
+                  <p className="font-bold text-gray-800 text-sm">{session.student?.fullName || "Student"}</p>
                   <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-medium">
-                    {session.mode}
+                    {session.mode || "Mode"}
                   </span>
                 </div>
                 <p className="text-xs text-gray-400">{session.topic}</p>
                 <p className="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                  <i className="fa-regular fa-calendar text-gray-400" /> {session.when}
+                  <i className="fa-regular fa-calendar text-gray-400" /> {session.startTime || ""}
                 </p>
               </div>
               <div className="flex gap-2 mt-3 md:mt-0">
-                {session.showJoin ? (
+                {session.meetingLink ? (
                   <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-xs font-bold transition">
                     Join Meeting
                   </button>
@@ -170,7 +183,7 @@ export default function TutorDashboard() {
                 <div className="w-full bg-gray-100 rounded-full h-2 relative">
                   <div
                     className="bg-blue-600 h-2 rounded-full absolute left-0 top-0"
-                    style={{ width: `${(metric.value / 5) * 100}%` }}
+                    style={{ width: `${(typeof metric.value === "number" ? (metric.value / 5) * 100 : 0)}%` }}
                   />
                   <div className="w-3 h-3 bg-white border-2 border-gray-300 rounded-full absolute top-[-2px] right-0 shadow-sm" />
                 </div>

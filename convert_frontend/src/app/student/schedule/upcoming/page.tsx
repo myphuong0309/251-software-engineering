@@ -3,50 +3,30 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
 import { formatDate, formatTimeRange } from "@/lib/format";
-import { sampleSessions } from "@/lib/sample-data";
 import { Session } from "@/types/api";
 
-const upcomingCards = [
-  {
-    sessionId: "session-1",
-    tutor: "Dr. Jane Smith",
-    topic: "CO3001 – Software Engineering",
-    date: "Oct 15, 2023",
-    time: "2:00 PM – 3:30 PM",
-    meetingLink: "https://meet.example.com/session-1",
-  },
-  {
-    sessionId: "session-2",
-    tutor: "Prof. Robert Chen",
-    topic: "CO2003 – Data Structures and Algorithms",
-    date: "Oct 18, 2023",
-    time: "10:00 AM – 11:30 AM",
-    meetingLink: "",
-  },
-];
-
 export default function UpcomingSchedulePage() {
-  const { auth } = useAuth();
-  const [sessions, setSessions] = useState<Session[]>(sampleSessions);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadSessions = async () => {
-      if (!auth.userId) return;
       setLoading(true);
+      setError(null);
       try {
-        const data = await api.getSessionsForStudent(auth.userId, auth.token);
-        if (data?.length) setSessions(data);
+        const data = await api.getSessionsForStudent("student-1");
+        setSessions(data || []);
       } catch (error) {
-        console.warn("Using sample schedule because API failed", error);
+        console.warn("Unable to load schedule", error);
+        setError("Unable to load sessions. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
     loadSessions();
-  }, [auth.token, auth.userId]);
+  }, []);
 
   const upcomingSessions = sessions.filter((session) => {
     const start = session.startTime ? new Date(session.startTime) : null;
@@ -78,8 +58,12 @@ export default function UpcomingSchedulePage() {
         <div className="px-4 sm:px-6 py-5 space-y-4">
           {loading ? (
             <p className="text-sm text-gray-500">Loading sessions...</p>
+          ) : error ? (
+            <p className="text-sm text-red-600">{error}</p>
+          ) : upcomingSessions.length === 0 ? (
+            <p className="text-sm text-gray-500">No upcoming sessions found.</p>
           ) : null}
-          {(upcomingSessions.length ? upcomingSessions : upcomingCards).map((session) => (
+          {upcomingSessions.map((session) => (
             <div
               key={session.sessionId}
               className="border border-gray-100 rounded-xl p-4 sm:p-5 bg-white flex flex-col gap-3"

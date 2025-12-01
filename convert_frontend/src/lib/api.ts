@@ -10,6 +10,7 @@ import {
   Report,
   Resource,
   Session,
+  Tutor,
   User,
 } from "@/types/api";
 
@@ -29,6 +30,11 @@ export const api = {
     apiFetch<User>(`/users/${userId}/activate`, { method: "PUT", token }),
   deactivateUser: (userId: string, token?: string) =>
     apiFetch<User>(`/users/${userId}/deactivate`, { method: "PUT", token }),
+  getUsers: (token?: string) => apiFetch<User[]>("/users", { token }),
+  getAllUsers: (token?: string) => apiFetch<User[]>("/users", { token }),
+  getTutors: (token?: string) => apiFetch<Tutor[]>("/tutors", { token }),
+  getTutorById: (tutorId: string, token?: string) =>
+    apiFetch<Tutor>(`/tutors/${tutorId}`, { token }),
 
   // Matching
   createMatchingRequest: (
@@ -66,6 +72,9 @@ export const api = {
     apiFetch<Session[]>(`/sessions/student/${studentId}`, { token }),
   getSessionsForTutor: (tutorId: string, token?: string) =>
     apiFetch<Session[]>(`/sessions/tutor/${tutorId}`, { token }),
+  getSessionById: (sessionId: string, token?: string) =>
+    apiFetch<Session>(`/sessions/${sessionId}`, { token }),
+  getAllSessions: (token?: string) => apiFetch<Session[]>(`/sessions`, { token }),
   cancelSession: (sessionId: string, token?: string) =>
     apiFetch<Session>(`/sessions/cancel/${sessionId}`, {
       method: "POST",
@@ -116,6 +125,9 @@ export const api = {
       body: resource,
       token,
     }),
+  getResources: (token?: string) => apiFetch<Resource[]>("/resources", { token }),
+  getResourceById: (resourceId: string, token?: string) =>
+    apiFetch<Resource>(`/resources/${resourceId}`, { token }),
   getResourcesForSession: (sessionId: string, token?: string) =>
     apiFetch<Resource[]>(`/resources/session/${sessionId}`, { token }),
   removeResourceFromSession: (resourceId: string, token?: string) =>

@@ -1,51 +1,44 @@
 'use client';
 
 import Link from "next/link";
-
-const subjects = [
-  {
-    id: "co3001",
-    title: "CO3001 – Software Engineering",
-    class: "SE2023-01",
-    major: "Computer Science",
-    total: "5 files",
-    updated: "2 days ago",
-  },
-  {
-    id: "co2013",
-    title: "CO2013 – Database Systems",
-    class: "CS2023-02",
-    major: "Computer Engineering",
-    total: "3 files",
-    updated: "Yesterday",
-  },
-  {
-    id: "co3005",
-    title: "CO3005 – Principles of Programming Languages",
-    class: "CS2023-01",
-    major: "Computer Science",
-    total: "4 files",
-    updated: "3 days ago",
-  },
-  {
-    id: "co2003",
-    title: "CO2003 – Data Structures and Algorithms",
-    class: "CS2023-01",
-    major: "Information Systems",
-    total: "6 files",
-    updated: "1 week ago",
-  },
-  {
-    id: "co3001-retake",
-    title: "CO3001 – Software Engineering (Retake)",
-    class: "SE2023-02",
-    major: "Software Engineering",
-    total: "2 files",
-    updated: "5 days ago",
-  },
-];
+import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/api";
+import { Resource } from "@/types/api";
 
 export default function TutorResourcesPage() {
+  const tutorId = "tutor-1";
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await api.getResources();
+        setResources((data || []).filter((r) => r.session?.tutor?.userId === tutorId || !r.session?.tutor));
+      } catch (err) {
+        console.warn("Unable to load resources", err);
+        setError("Unable to load resources.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const filtered = useMemo(() => {
+    return resources.filter((r) => {
+      if (!search) return true;
+      return (
+        r.title?.toLowerCase().includes(search.toLowerCase()) ||
+        r.session?.topic?.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+  }, [resources, search]);
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <section>
@@ -63,6 +56,8 @@ export default function TutorResourcesPage() {
               id="search"
               placeholder="Search by subject, code, or class..."
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
@@ -97,33 +92,33 @@ export default function TutorResourcesPage() {
         </form>
       </section>
 
-      <p className="text-xs text-gray-400">5 subjects found</p>
+      {loading ? <p className="text-xs text-gray-400">Loading...</p> : null}
+      {error ? <p className="text-xs text-red-600">{error}</p> : null}
+      {!loading && !error ? (
+        <p className="text-xs text-gray-400">{filtered.length} resources found</p>
+      ) : null}
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {subjects.map((subject) => (
+        {filtered.map((res) => (
           <div
-            key={subject.id}
+            key={res.resourceId}
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex flex-col gap-3"
           >
             <div>
-              <h4 className="text-sm font-bold text-gray-800">{subject.title}</h4>
+              <h4 className="text-sm font-bold text-gray-800">{res.title}</h4>
               <p className="text-xs text-gray-400 mt-0.5">
-                Class: {subject.class} • Major: {subject.major}
+                Session: {res.session?.topic || res.session?.sessionId || "N/A"}
               </p>
             </div>
             <div className="text-xs text-gray-700 space-y-1">
               <p>
-                <span className="font-semibold text-gray-800">Total resources: </span>
-                <span>{subject.total}</span>
-              </p>
-              <p>
-                <span className="font-semibold text-gray-800">Last updated: </span>
-                <span>{subject.updated}</span>
+                <span className="font-semibold text-gray-800">Description: </span>
+                <span>{res.description}</span>
               </p>
             </div>
             <div className="mt-2">
               <Link
-                href={`/tutor/resources/${subject.id}`}
+                href={`/tutor/resources/${res.resourceId}`}
                 className="inline-flex items-center justify-center px-4 py-2 rounded-lg text-xs font-bold bg-blue-700 text-white hover:bg-blue-800 transition"
               >
                 Manage Resources

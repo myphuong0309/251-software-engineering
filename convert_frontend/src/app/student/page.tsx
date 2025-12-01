@@ -3,37 +3,32 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
 import { formatDate, formatTimeRange } from "@/lib/format";
-import {
-  sampleMatchingRequests,
-  sampleSessions,
-  sampleTutors,
-} from "@/lib/sample-data";
 import { MatchingRequest, Session } from "@/types/api";
 
 export default function StudentDashboard() {
-  const { auth } = useAuth();
-  const [sessions, setSessions] = useState<Session[]>(sampleSessions);
-  const [matches, setMatches] =
-    useState<MatchingRequest[]>(sampleMatchingRequests);
+  const studentId = "student-1";
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [matches, setMatches] = useState<MatchingRequest[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
-      if (!auth.userId) return;
+      setError(null);
       try {
         const [sessionData, matchData] = await Promise.all([
-          api.getSessionsForStudent(auth.userId, auth.token),
-          api.getMatchingRequestsForStudent(auth.userId, auth.token),
+          api.getSessionsForStudent(studentId),
+          api.getMatchingRequestsForStudent(studentId),
         ]);
-        if (sessionData?.length) setSessions(sessionData);
-        if (matchData?.length) setMatches(matchData);
+        setSessions(sessionData || []);
+        setMatches(matchData || []);
       } catch (error) {
-        console.warn("Falling back to sample data", error);
+        console.warn("Unable to load student dashboard data", error);
+        setError("Unable to load your latest sessions. Please try again later.");
       }
     };
     loadData();
-  }, [auth.token, auth.userId]);
+  }, []);
 
   const upcoming = useMemo(() => {
     const futureSessions = sessions
@@ -43,15 +38,11 @@ export default function StudentDashboard() {
           new Date(a.startTime || 0).getTime() -
           new Date(b.startTime || 0).getTime(),
       );
-    return futureSessions[0] || sessions[0];
+    return futureSessions[0] || null;
   }, [sessions]);
 
   const matchedTutors = useMemo(() => {
-    const tutorsFromMatches = matches
-      .map((item) => item.tutor)
-      .filter(Boolean);
-    if (tutorsFromMatches.length) return tutorsFromMatches;
-    return sampleTutors.slice(0, 1);
+    return matches.map((item) => item.tutor).filter(Boolean);
   }, [matches]);
 
   return (
@@ -69,15 +60,19 @@ export default function StudentDashboard() {
           </h2>
           <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
             <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-xl font-semibold text-blue-600">
-              JS
+              {(upcoming.tutor?.fullName || "Tutor")
+                .split(" ")
+                .map((part) => part[0])
+                .join("")
+                .slice(0, 2)}
             </div>
 
             <div className="flex-1 space-y-1">
               <h3 className="text-base font-semibold text-gray-800">
-                Dr. Jane Smith
+                {upcoming.tutor?.fullName || "Tutor"}
               </h3>
               <p className="text-sm text-gray-600">
-                CO3001 – Software Engineering
+                {upcoming.topic || "Upcoming session"}
               </p>
               <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
                 <span className="flex items-center gap-1">
@@ -104,6 +99,10 @@ export default function StudentDashboard() {
               </Link>
             </div>
           </div>
+        </section>
+      ) : error ? (
+        <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <p className="text-sm text-red-600">{error}</p>
         </section>
       ) : null}
 
@@ -159,28 +158,38 @@ export default function StudentDashboard() {
           Matched Tutors
         </h2>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
-              RC
-            </div>
-            <div>
-              <h3 className="text-base font-semibold text-gray-800">
-                Prof. Robert Chen
-              </h3>
-              <p className="text-sm text-gray-600">
-                CO2003 – Data Structures and Algorithms
-              </p>
-            </div>
-          </div>
+        {matchedTutors.length === 0 ? (
+          <p className="text-sm text-gray-500">No matched tutors yet.</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {matchedTutors.map((tutor) => (
+              <div key={tutor?.userId} className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-sm font-semibold text-blue-700">
+                  {(tutor?.fullName || "T")
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")
+                    .slice(0, 2)}
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-gray-800">
+                    {tutor?.fullName || "Tutor"}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {tutor?.expertiseAreas?.join(", ") || "Specialization coming soon"}
+                  </p>
+                </div>
+              </div>
+            ))}
 
-          <Link
-            href="/student/schedule/upcoming"
-            className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 hover:border-blue-800 transition"
-          >
-            Schedule New Session
-          </Link>
-        </div>
+            <Link
+              href="/student/schedule/upcoming"
+              className="w-full inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border border-blue-700 text-blue-700 hover:bg-blue-50 hover:border-blue-800 transition"
+            >
+              Schedule New Session
+            </Link>
+          </div>
+        )}
       </section>
     </div>
   );
