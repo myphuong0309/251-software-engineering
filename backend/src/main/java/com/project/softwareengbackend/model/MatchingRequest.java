@@ -32,6 +32,11 @@ public class MatchingRequest {
     private String subject;
 
     @ElementCollection
+    @CollectionTable(
+            name = "matching_request_preferred_time_slots",
+            joinColumns = @JoinColumn(name = "request_id")
+    )
+    @Column(name = "time_slot")
     private List<LocalDateTime> preferredTimeSlots;
 
     @Enumerated(EnumType.STRING)

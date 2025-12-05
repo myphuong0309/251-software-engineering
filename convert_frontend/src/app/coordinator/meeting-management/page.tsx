@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Session } from "@/types/api";
 
 export default function MeetingManagementPage() {
+  const { auth } = useAuth();
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selected, setSelected] = useState<Session | null>(null);
   const [loading, setLoading] = useState(false);
@@ -12,10 +14,16 @@ export default function MeetingManagementPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in as a coordinator to view sessions.");
+        setSessions([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getAllSessions();
+        const data = await api.getAllSessions(auth.token);
         setSessions(data || []);
       } catch (err) {
         console.warn("Unable to load sessions", err);
@@ -25,7 +33,7 @@ export default function MeetingManagementPage() {
       }
     };
     load();
-  }, []);
+  }, [auth.token]);
 
   const stats = useMemo(() => {
     const total = sessions.length;

@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { MatchingRequest, Session } from "@/types/api";
 
 export default function TutorDashboard() {
-  const tutorId = "tutor-1";
+  const { auth } = useAuth();
+  const tutorId = auth.userId || "tutor-1";
   const [pending, setPending] = useState<MatchingRequest[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -14,12 +16,19 @@ export default function TutorDashboard() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view your dashboard.");
+        setPending([]);
+        setSessions([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
         const [reqs, sess] = await Promise.all([
-          api.getMatchingRequestsForTutor(tutorId),
-          api.getSessionsForTutor(tutorId),
+          api.getMatchingRequestsForTutor(tutorId, auth.token),
+          api.getSessionsForTutor(tutorId, auth.token),
         ]);
         setPending((reqs || []).filter((r) => r.status === "PENDING"));
         setSessions(sess || []);
@@ -31,7 +40,7 @@ export default function TutorDashboard() {
       }
     };
     load();
-  }, []);
+  }, [auth.token, tutorId]);
 
   const upcomingSessions = useMemo(() => {
     return sessions

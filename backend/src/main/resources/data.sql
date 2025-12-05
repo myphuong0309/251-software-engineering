@@ -27,24 +27,41 @@ ON DUPLICATE KEY UPDATE full_name=VALUES(full_name), email=VALUES(email), phone_
 -- =========================================================================================================
 -- 2. Detailed Role Tables
 -- =========================================================================================================
-INSERT INTO students (user_id, major, gpa, enrolled_courses) VALUES
-  ('student-1', 'Computer Science',       3.6, '["CO3001","CO2003","CO1001"]'),
-  ('student-2', 'Information Systems',    3.4, '["CO2003","CO2013"]'),
-  ('student-3', 'Computer Engineering',   3.2, '["CO3005","CO3001"]'),
-  ('student-4', 'Software Engineering',   3.8, '["CO3001","CO3005","CO4001"]'),
-  ('student-5', 'Computer Science',       3.1, '["CO2013"]'),
-  ('student-6', 'Artificial Intelligence',3.9, '["CO3001","AI1001"]'),
-  ('student-7', 'Network Engineering',    2.8, '["NW101","CO2003"]'),
-  ('student-8', 'Computer Science',       2.5, '["CO1001"]')
-ON DUPLICATE KEY UPDATE major=VALUES(major), gpa=VALUES(gpa), enrolled_courses=VALUES(enrolled_courses);
+INSERT INTO students (user_id, major, gpa) VALUES
+  ('student-1', 'Computer Science',       3.6),
+  ('student-2', 'Information Systems',    3.4),
+  ('student-3', 'Computer Engineering',   3.2),
+  ('student-4', 'Software Engineering',   3.8),
+  ('student-5', 'Computer Science',       3.1),
+  ('student-6', 'Artificial Intelligence',3.9),
+  ('student-7', 'Network Engineering',    2.8),
+  ('student-8', 'Computer Science',       2.5)
+ON DUPLICATE KEY UPDATE major=VALUES(major), gpa=VALUES(gpa);
 
-INSERT INTO tutors (user_id, expertise_areas, biography, average_rating) VALUES
-  ('tutor-1', '["Java","Databases","Software Engineering"]', 'Ph.D. in Software Architecture with 10 years of teaching experience.', 4.8),
-  ('tutor-2', '["Algorithms","Data Structures","Python"]',   'Passionate about competitive programming and algorithmic efficiency.', 4.6),
-  ('tutor-3', '["Database Systems","SQL","NoSQL"]',          'Certified Database Administrator specializing in big data.', 4.7),
-  ('tutor-4', '["Artificial Intelligence","Machine Learning"]','Researcher in Deep Learning and Neural Networks.', 5.0),
-  ('tutor-5', '["Legacy Systems","COBOL"]',                  'Retired professor helping with legacy codebases.', 0.0)
-ON DUPLICATE KEY UPDATE expertise_areas=VALUES(expertise_areas), biography=VALUES(biography), average_rating=VALUES(average_rating);
+INSERT INTO student_courses (student_id, course) VALUES
+  ('student-1', 'CO3001'), ('student-1', 'CO2003'), ('student-1', 'CO1001'),
+  ('student-2', 'CO2003'), ('student-2', 'CO2013'),
+  ('student-3', 'CO3005'), ('student-3', 'CO3001'),
+  ('student-4', 'CO3001'), ('student-4', 'CO3005'), ('student-4', 'CO4001'),
+  ('student-5', 'CO2013'),
+  ('student-6', 'CO3001'), ('student-6', 'AI1001'),
+  ('student-7', 'NW101'),  ('student-7', 'CO2003'),
+  ('student-8', 'CO1001');
+
+INSERT INTO tutors (user_id, biography, average_rating) VALUES
+  ('tutor-1', 'Ph.D. in Software Architecture with 10 years of teaching experience.', 4.8),
+  ('tutor-2', 'Passionate about competitive programming and algorithmic efficiency.', 4.6),
+  ('tutor-3', 'Certified Database Administrator specializing in big data.', 4.7),
+  ('tutor-4', 'Researcher in Deep Learning and Neural Networks.', 5.0),
+  ('tutor-5', 'Retired professor helping with legacy codebases.', 0.0)
+ON DUPLICATE KEY UPDATE biography=VALUES(biography), average_rating=VALUES(average_rating);
+
+INSERT INTO tutor_expertise (tutor_id, expertise_area) VALUES
+  ('tutor-1', 'Java'), ('tutor-1', 'Databases'), ('tutor-1', 'Software Engineering'),
+  ('tutor-2', 'Algorithms'), ('tutor-2', 'Data Structures'), ('tutor-2', 'Python'),
+  ('tutor-3', 'Database Systems'), ('tutor-3', 'SQL'), ('tutor-3', 'NoSQL'),
+  ('tutor-4', 'Artificial Intelligence'), ('tutor-4', 'Machine Learning'),
+  ('tutor-5', 'Legacy Systems'), ('tutor-5', 'COBOL');
 
 INSERT INTO coordinators (user_id, department_id) VALUES
   ('coordinator-1', 'DEPT-CSE-01'),
@@ -84,7 +101,7 @@ INSERT INTO sessions (session_id, student_id, tutor_id, topic, start_time, end_t
   ('session-7', 'student-6', 'tutor-4', 'Neural Networks Intro',      '2026-02-15 08:00:00', '2026-02-15 09:30:00', 90, 'ONLINE',    'SCHEDULED', 'https://meet.example.com/s7', NULL),
 
   -- Cancelled Sessions
-  ('session-8', 'student-5', 'tutor-2', 'Python for Beginners',       '2025-01-10 10:00:00', '2025-01-10 11:00:00', 60, 'ONLINE',    'CANCELLED', NULL, NULL),
+  ('session-8', 'student-5', 'tutor-2', 'Python for Beginners',       '2025-01-10 10:00:00', '2025-01-10 11:00:00', 60, 'ONLINE',    'CANCELED', NULL, NULL),
   
   -- Pending/Requested Sessions (if applicable to model)
   ('session-9', 'student-2', 'tutor-1', 'Microservices Patterns',     '2026-03-01 09:00:00', '2026-03-01 10:30:00', 90, 'ONLINE',    'SCHEDULED', NULL, NULL)
@@ -94,7 +111,7 @@ ON DUPLICATE KEY UPDATE status=VALUES(status);
 -- 5. Matching Requests
 -- =========================================================================================================
 INSERT INTO matching_requests (request_id, student_id, tutor_id, subject, status, created_date) VALUES
-  ('mr-1', 'student-1', 'tutor-1', 'Software Engineering', 'APPROVED', '2024-09-15 10:00:00'),
+  ('mr-1', 'student-1', 'tutor-1', 'Software Engineering', 'ACCEPTED', '2024-09-15 10:00:00'),
   ('mr-2', 'student-2', 'tutor-3', 'Database Systems',     'PENDING',  '2025-12-01 09:00:00'),
   ('mr-3', 'student-7', 'tutor-2', 'Basic Programming',    'REJECTED', '2024-11-20 11:00:00'),
   ('mr-4', 'student-6', 'tutor-4', 'AI Research',          'PENDING',  '2025-12-05 14:00:00')
@@ -141,7 +158,7 @@ ON DUPLICATE KEY UPDATE content=VALUES(content);
 -- 9. Reports
 -- =========================================================================================================
 INSERT INTO reports (report_id, generated_by_coordinator_id, generated_date, report_type, criteria) VALUES
-  ('rep-1', 'coordinator-1', '2024-12-01 09:00:00', 'MONTHLY_ACTIVITY', '{"month": "11", "year": "2024"}'),
+  ('rep-1', 'coordinator-1', '2024-12-01 09:00:00', 'STUDENT_ACTIVITY', '{"month": "11", "year": "2024"}'),
   ('rep-2', 'coordinator-1', '2025-01-01 09:00:00', 'TUTOR_PERFORMANCE', '{"tutorId": "tutor-1"}')
 ON DUPLICATE KEY UPDATE generated_date=VALUES(generated_date);
 
@@ -150,7 +167,7 @@ ON DUPLICATE KEY UPDATE generated_date=VALUES(generated_date);
 -- =========================================================================================================
 INSERT INTO forum_posts (post_id, author_id, title, content, created_date, status) VALUES
   ('post-1', 'student-1', 'How to prepare for Final Exam?', 'Any tips for the Software Engineering final?', '2024-12-10 10:00:00', 'OPEN'),
-  ('post-2', 'tutor-1',   'Office Hours Changes',           'My office hours this week are shifted to Friday.', '2024-12-12 08:00:00', 'PINNED'),
+  ('post-2', 'tutor-1',   'Office Hours Changes',           'My office hours this week are shifted to Friday.', '2024-12-12 08:00:00', 'OPEN'),
   ('post-3', 'student-4', 'Looking for study group',        'Anyone want to study for Algorithms together?',    '2024-12-15 14:00:00', 'OPEN')
 ON DUPLICATE KEY UPDATE title=VALUES(title);
 

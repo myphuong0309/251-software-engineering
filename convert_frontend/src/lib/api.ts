@@ -30,6 +30,7 @@ export const api = {
     apiFetch<User>(`/users/${userId}/activate`, { method: "PUT", token }),
   deactivateUser: (userId: string, token?: string) =>
     apiFetch<User>(`/users/${userId}/deactivate`, { method: "PUT", token }),
+  getMe: (token: string) => apiFetch<User>("/users/me", { token }),
   getUsers: (token?: string) => apiFetch<User[]>("/users", { token }),
   getAllUsers: (token?: string) => apiFetch<User[]>("/users", { token }),
   getTutors: (token?: string) => apiFetch<Tutor[]>("/tutors", { token }),

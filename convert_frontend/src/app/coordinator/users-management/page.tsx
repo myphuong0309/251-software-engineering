@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { User } from "@/types/api";
 
 export default function UsersManagementPage() {
+  const { auth } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -13,10 +15,16 @@ export default function UsersManagementPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in as a coordinator to view users.");
+        setUsers([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getAllUsers();
+        const data = await api.getAllUsers(auth.token);
         setUsers(data || []);
       } catch (err) {
         console.warn("Unable to load users", err);
@@ -26,7 +34,7 @@ export default function UsersManagementPage() {
       }
     };
     load();
-  }, []);
+  }, [auth.token]);
 
   const stats = useMemo(() => {
     const total = users.length;

@@ -4,18 +4,26 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Resource } from "@/types/api";
 
 export default function TutorResourceDetailsPage() {
   const params = useParams<{ id: string }>();
   const [resource, setResource] = useState<Resource | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { auth } = useAuth();
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view this resource.");
+        setResource(null);
+        return;
+      }
+
       setError(null);
       try {
-        const data = await api.getResourceById(params.id);
+        const data = await api.getResourceById(params.id, auth.token);
         setResource(data || null);
       } catch (err) {
         console.warn("Unable to load resource", err);
@@ -23,7 +31,7 @@ export default function TutorResourceDetailsPage() {
       }
     };
     if (params.id) load();
-  }, [params.id]);
+  }, [auth.token, params.id]);
 
   const icon = useMemo(() => {
     const title = resource?.title?.toLowerCase() || "";

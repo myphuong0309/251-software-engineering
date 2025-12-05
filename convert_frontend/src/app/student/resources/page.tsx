@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Resource } from "@/types/api";
 
 export default function StudentResourcesPage() {
+  const { auth } = useAuth();
   const [search, setSearch] = useState("");
   const [sessionFilter, setSessionFilter] = useState("All Sessions");
   const [typeFilter, setTypeFilter] = useState("All Types");
@@ -14,9 +16,15 @@ export default function StudentResourcesPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view resources.");
+        setResources([]);
+        return;
+      }
+
       setError(null);
       try {
-        const data = await api.getResources();
+        const data = await api.getResources(auth.token);
         setResources(data || []);
       } catch (err) {
         console.warn("Unable to load resources", err);
@@ -24,7 +32,7 @@ export default function StudentResourcesPage() {
       }
     };
     load();
-  }, []);
+  }, [auth.token]);
 
   const filtered = useMemo(() => {
     return resources.filter((res) => {

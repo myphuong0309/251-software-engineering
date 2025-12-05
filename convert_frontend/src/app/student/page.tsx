@@ -3,32 +3,45 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { formatDate, formatTimeRange } from "@/lib/format";
 import { MatchingRequest, Session } from "@/types/api";
 
 export default function StudentDashboard() {
-  const studentId = "student-1";
+  const { auth } = useAuth();
+  const studentId = auth.userId || "student-1";
   const [sessions, setSessions] = useState<Session[]>([]);
   const [matches, setMatches] = useState<MatchingRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
+      if (!auth.token) {
+        setError("Please log in to view your latest sessions.");
+        setSessions([]);
+        setMatches([]);
+        return;
+      }
+
+      setLoading(true);
       setError(null);
       try {
         const [sessionData, matchData] = await Promise.all([
-          api.getSessionsForStudent(studentId),
-          api.getMatchingRequestsForStudent(studentId),
+          api.getSessionsForStudent(studentId, auth.token),
+          api.getMatchingRequestsForStudent(studentId, auth.token),
         ]);
         setSessions(sessionData || []);
         setMatches(matchData || []);
       } catch (error) {
         console.warn("Unable to load student dashboard data", error);
         setError("Unable to load your latest sessions. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
-  }, []);
+  }, [auth.token, studentId]);
 
   const upcoming = useMemo(() => {
     const futureSessions = sessions
@@ -52,6 +65,12 @@ export default function StudentDashboard() {
           Welcome back, John!
         </h1>
       </section>
+
+      {loading ? (
+        <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <p className="text-sm text-gray-600">Loading your dashboard...</p>
+        </section>
+      ) : null}
 
       {upcoming ? (
         <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

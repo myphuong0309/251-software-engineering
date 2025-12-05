@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Resource } from "@/types/api";
 
 export default function TutorResourcesPage() {
-  const tutorId = "tutor-1";
+  const { auth } = useAuth();
+  const tutorId = auth.userId || "tutor-1";
   const [resources, setResources] = useState<Resource[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -14,10 +16,16 @@ export default function TutorResourcesPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view resources.");
+        setResources([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getResources();
+        const data = await api.getResources(auth.token);
         setResources((data || []).filter((r) => r.session?.tutor?.userId === tutorId || !r.session?.tutor));
       } catch (err) {
         console.warn("Unable to load resources", err);
@@ -27,7 +35,7 @@ export default function TutorResourcesPage() {
       }
     };
     load();
-  }, []);
+  }, [auth.token, tutorId]);
 
   const filtered = useMemo(() => {
     return resources.filter((r) => {

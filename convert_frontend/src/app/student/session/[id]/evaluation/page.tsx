@@ -33,8 +33,14 @@ export default function SessionEvaluationPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setStatus("Please log in to view session details.");
+        setSession(null);
+        return;
+      }
+
       try {
-        const data = await api.getSessionById(params.id);
+        const data = await api.getSessionById(params.id, auth.token);
         setSession(data || null);
       } catch (err) {
         console.warn("Unable to load session for evaluation", err);
@@ -42,11 +48,15 @@ export default function SessionEvaluationPage() {
       }
     };
     if (params.id) load();
-  }, [params.id]);
+  }, [auth.token, params.id]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus(null);
+    if (!auth.token) {
+      setStatus("Please log in to submit your evaluation.");
+      return;
+    }
     if (!auth.userId) {
       setStatus("Add your userId on login to submit an evaluation.");
       return;
@@ -70,6 +80,10 @@ export default function SessionEvaluationPage() {
       setStatus("Feedback submitted. Thank you!");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Submit failed.";
+      if (message.includes("403") || message.includes("401")) {
+        setStatus("Session expired or permission denied. Please log in again.");
+        return;
+      }
       setStatus(message);
     } finally {
       setSubmitting(false);

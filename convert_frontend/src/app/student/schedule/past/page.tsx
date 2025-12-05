@@ -3,20 +3,29 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { formatDate, formatTimeRange } from "@/lib/format";
 import { Session } from "@/types/api";
 
 export default function PastSchedulePage() {
+  const { auth } = useAuth();
+  const studentId = auth.userId || "student-1";
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadSessions = async () => {
+      if (!auth.token) {
+        setError("Please log in to view your sessions.");
+        setSessions([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getSessionsForStudent("student-1");
+        const data = await api.getSessionsForStudent(studentId, auth.token);
         setSessions(data || []);
       } catch (error) {
         console.warn("Unable to load past sessions", error);
@@ -26,7 +35,7 @@ export default function PastSchedulePage() {
       }
     };
     loadSessions();
-  }, []);
+  }, [auth.token, studentId]);
 
   const pastSessions = sessions.filter((session) => {
     const start = session.startTime ? new Date(session.startTime) : null;

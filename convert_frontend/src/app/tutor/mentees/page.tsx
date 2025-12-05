@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Session, User } from "@/types/api";
 
 export default function TutorMenteesPage() {
-  const tutorId = "tutor-1";
+  const { auth } = useAuth();
+  const tutorId = auth.userId || "tutor-1";
   const [sessions, setSessions] = useState<Session[]>([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -14,10 +16,16 @@ export default function TutorMenteesPage() {
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view mentees.");
+        setSessions([]);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
-        const data = await api.getSessionsForTutor(tutorId);
+        const data = await api.getSessionsForTutor(tutorId, auth.token);
         setSessions(data || []);
       } catch (err) {
         console.warn("Unable to load mentees", err);
@@ -27,7 +35,7 @@ export default function TutorMenteesPage() {
       }
     };
     load();
-  }, []);
+  }, [auth.token, tutorId]);
 
   const mentees = useMemo(() => {
     const map = new Map<string, { user: User; sessions: Session[] }>();

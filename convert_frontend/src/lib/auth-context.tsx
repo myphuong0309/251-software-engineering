@@ -22,9 +22,6 @@ type AuthState = {
 type LoginPayload = {
   email: string;
   password: string;
-  role: Role;
-  userId?: string;
-  fullName?: string;
 };
 
 type AuthContextValue = {
@@ -60,14 +57,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = async ({ email, password, role, userId, fullName }: LoginPayload) => {
+  const login = async ({ email, password }: LoginPayload) => {
     const response = await api.login(email, password);
+    const user = await api.getMe(response.token);
+    
     const nextState: AuthState = {
       token: response.token,
-      role,
+      role: user.role,
       email,
-      userId,
-      fullName: fullName || email.split("@")[0],
+      userId: user.userId,
+      fullName: user.fullName || email.split("@")[0],
     };
     persist(nextState);
   };

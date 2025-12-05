@@ -4,24 +4,35 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { Resource } from "@/types/api";
 
 export default function ResourceDetailsPage() {
   const params = useParams<{ id: string }>();
   const [resource, setResource] = useState<Resource | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { auth } = useAuth();
 
   useEffect(() => {
     const load = async () => {
+      if (!auth.token) {
+        setError("Please log in to view this resource.");
+        setResource(null);
+        return;
+      }
+
+      setError(null);
       try {
-        const data = await api.getResourceById(params.id);
+        const data = await api.getResourceById(params.id, auth.token);
         setResource(data || null);
       } catch (err) {
         console.warn("Unable to load resource", err);
+        setError("Unable to load resource.");
         setResource(null);
       }
     };
     if (params.id) load();
-  }, [params.id]);
+  }, [auth.token, params.id]);
 
   const badge = useMemo(() => {
     const title = resource?.title?.toLowerCase() || "";
@@ -54,6 +65,10 @@ export default function ResourceDetailsPage() {
           </p>
         </header>
       </section>
+
+      {error ? (
+        <p className="text-sm text-red-600">{error}</p>
+      ) : null}
 
       <section className="space-y-1">
         <h3 className="text-lg font-semibold text-gray-800">Session Materials</h3>
