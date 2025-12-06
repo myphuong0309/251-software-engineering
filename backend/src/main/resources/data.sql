@@ -38,15 +38,7 @@ INSERT INTO students (user_id, major, gpa) VALUES
   ('student-8', 'Computer Science',       2.5)
 ON DUPLICATE KEY UPDATE major=VALUES(major), gpa=VALUES(gpa);
 
-INSERT INTO student_courses (student_id, course) VALUES
-  ('student-1', 'CO3001'), ('student-1', 'CO2003'), ('student-1', 'CO1001'),
-  ('student-2', 'CO2003'), ('student-2', 'CO2013'),
-  ('student-3', 'CO3005'), ('student-3', 'CO3001'),
-  ('student-4', 'CO3001'), ('student-4', 'CO3005'), ('student-4', 'CO4001'),
-  ('student-5', 'CO2013'),
-  ('student-6', 'CO3001'), ('student-6', 'AI1001'),
-  ('student-7', 'NW101'),  ('student-7', 'CO2003'),
-  ('student-8', 'CO1001');
+
 
 INSERT INTO tutors (user_id, biography, average_rating) VALUES
   ('tutor-1', 'Ph.D. in Software Architecture with 10 years of teaching experience.', 4.8),

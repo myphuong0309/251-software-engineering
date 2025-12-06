@@ -166,7 +166,7 @@ export default function TutorAvailabilityPage() {
     try {
       await api.createAvailability(
         {
-          tutor: { userId: tutorId },
+          tutor: { userId: tutorId, fullName: auth.fullName || "Tutor" },
           startTime: startDate.toISOString(),
           endTime: endDate.toISOString(),
           isRecurring: recurrence !== "None (One-time)",

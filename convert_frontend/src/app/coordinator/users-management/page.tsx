@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
-import { User } from "@/types/api";
+import { User, Role } from "@/types/api";
 
 export default function UsersManagementPage() {
   const { auth } = useAuth();
@@ -13,27 +13,33 @@ export default function UsersManagementPage() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("All");
 
-  useEffect(() => {
-    const load = async () => {
-      if (!auth.token) {
-        setError("Please log in as a coordinator to view users.");
-        setUsers([]);
-        return;
-      }
+  // Edit Modal State
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await api.getAllUsers(auth.token);
-        setUsers(data || []);
-      } catch (err) {
-        console.warn("Unable to load users", err);
-        setError("Unable to load users.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+  const loadUsers = async () => {
+    if (!auth.token) {
+      setError("Please log in as a coordinator to view users.");
+      setUsers([]);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.getAllUsers(auth.token);
+      setUsers(data || []);
+    } catch (err) {
+      console.warn("Unable to load users", err);
+      setError("Unable to load users.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
   }, [auth.token]);
 
   const stats = useMemo(() => {
@@ -57,6 +63,63 @@ export default function UsersManagementPage() {
     });
   }, [users, roleFilter, search]);
 
+  const handleToggleStatus = async (user: User) => {
+    if (!auth.token) return;
+    setActionLoading(user.userId);
+    try {
+      const action = user.isActive ? api.deactivateUser : api.activateUser;
+      const updated = await action(user.userId, auth.token);
+      if (updated) {
+        setUsers((prev) =>
+          prev.map((u) => (u.userId === updated.userId ? { ...u, ...updated } : u))
+        );
+      }
+    } catch (err) {
+      console.error("Failed to update user status", err);
+      alert("Failed to update user status.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleEditClick = async (userId: string) => {
+    if (!auth.token) return;
+    setActionLoading(userId);
+    try {
+      // Fetch fresh details to ensure we have the latest data before editing
+      const user = await api.getUser(userId, auth.token);
+      if (user) {
+        setEditingUser(user);
+      }
+    } catch (err) {
+      console.error("Failed to fetch user details", err);
+      alert("Could not load user details for editing.");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleSaveUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser || !auth.token) return;
+    
+    setSaving(true);
+    try {
+      const updated = await api.updateUser(editingUser.userId, editingUser, auth.token);
+      if (updated) {
+        setUsers((prev) =>
+          prev.map((u) => (u.userId === updated.userId ? { ...u, ...updated } : u))
+        );
+        setEditingUser(null);
+      }
+    } catch (err) {
+      console.error("Failed to update user", err);
+      alert("Failed to save changes.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="space-y-8 font-sans">
       <header className="flex justify-between items-start mb-8">
@@ -77,7 +140,7 @@ export default function UsersManagementPage() {
         </div>
       </header>
 
-      {loading ? <p className="text-sm text-gray-500">Loading users...</p> : null}
+      {loading && users.length === 0 ? <p className="text-sm text-gray-500">Loading users...</p> : null}
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -129,6 +192,7 @@ export default function UsersManagementPage() {
                 <th className="py-3 px-4">Email</th>
                 <th className="py-3 px-4">Role</th>
                 <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-gray-100">
@@ -143,15 +207,47 @@ export default function UsersManagementPage() {
                     </span>
                   </td>
                   <td className="py-4 px-4">
-                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        user.isActive
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
                       {user.isActive ? "Active" : "Inactive"}
                     </span>
+                  </td>
+                  <td className="py-4 px-4 text-right space-x-2">
+                    <button
+                      onClick={() => handleEditClick(user.userId)}
+                      disabled={actionLoading === user.userId}
+                      className="text-blue-600 hover:text-blue-800 text-xs font-semibold disabled:opacity-50"
+                    >
+                      Edit
+                    </button>
+                    {user.isActive ? (
+                      <button
+                        onClick={() => handleToggleStatus(user)}
+                        disabled={actionLoading === user.userId}
+                        className="text-red-600 hover:text-red-800 text-xs font-semibold disabled:opacity-50"
+                      >
+                        Deactivate
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleToggleStatus(user)}
+                        disabled={actionLoading === user.userId}
+                        className="text-green-600 hover:text-green-800 text-xs font-semibold disabled:opacity-50"
+                      >
+                        Activate
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
               {filtered.length === 0 ? (
                 <tr>
-                  <td className="py-4 px-4 text-sm text-gray-500" colSpan={5}>
+                  <td className="py-4 px-4 text-sm text-gray-500" colSpan={6}>
                     No users found.
                   </td>
                 </tr>
@@ -160,6 +256,88 @@ export default function UsersManagementPage() {
           </table>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {editingUser && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-lg font-bold text-gray-800">Edit User</h3>
+              <button
+                onClick={() => setEditingUser(null)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <i className="fa-solid fa-xmark text-xl" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleSaveUser} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={editingUser.fullName}
+                  onChange={(e) => setEditingUser({ ...editingUser, fullName: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1">Email</label>
+                <input
+                  type="email"
+                  required
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={editingUser.email || ""}
+                  onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-1">Role</label>
+                <select
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={editingUser.role || "STUDENT"}
+                  onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value as Role })}
+                >
+                  <option value="STUDENT">Student</option>
+                  <option value="TUTOR">Tutor</option>
+                  <option value="COORDINATOR">Coordinator</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-2 pt-2">
+                <input
+                  type="checkbox"
+                  id="isActive"
+                  className="rounded text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  checked={editingUser.isActive || false}
+                  onChange={(e) => setEditingUser({ ...editingUser, isActive: e.target.checked })}
+                />
+                <label htmlFor="isActive" className="text-sm text-gray-700">Active Account</label>
+              </div>
+
+              <div className="pt-4 flex gap-3 justify-end">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="px-4 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition flex items-center gap-2 disabled:opacity-70"
+                >
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
