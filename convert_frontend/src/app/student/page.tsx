@@ -8,8 +8,8 @@ import { formatDate, formatTimeRange } from "@/lib/format";
 import { MatchingRequest, Session } from "@/types/api";
 
 export default function StudentDashboard() {
-  const { auth } = useAuth();
-  const studentId = auth.userId || "student-1";
+  const { auth, ready } = useAuth();
+  const studentId = auth.userId;
   const [sessions, setSessions] = useState<Session[]>([]);
   const [matches, setMatches] = useState<MatchingRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -17,16 +17,22 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     const loadData = async () => {
+      if (!ready) return;
+
       if (!auth.token) {
         setError("Please log in to view your latest sessions.");
         setSessions([]);
         setMatches([]);
+        setLoading(false);
         return;
       }
 
       setLoading(true);
       setError(null);
       try {
+        if (!studentId) {
+          throw new Error("Missing student id.");
+        }
         const [sessionData, matchData] = await Promise.all([
           api.getSessionsForStudent(studentId, auth.token),
           api.getMatchingRequestsForStudent(studentId, auth.token),
@@ -41,7 +47,7 @@ export default function StudentDashboard() {
       }
     };
     loadData();
-  }, [auth.token, studentId]);
+  }, [auth.token, ready, studentId]);
 
   const upcoming = useMemo(() => {
     const futureSessions = sessions
@@ -62,7 +68,7 @@ export default function StudentDashboard() {
     <div className="space-y-8">
       <section>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
-          Welcome back, John!
+          Welcome back, {auth.fullName || "Student"}!
         </h1>
       </section>
 

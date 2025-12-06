@@ -41,11 +41,13 @@ services:
     build: ./convert_frontend
     restart: on-failure
     ports:
-      - "3000:80"
+      - "3000:3000"
     depends_on:
       - backend
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8080
+      NEXT_PUBLIC_API_URL: http://backend:8080/api
+      HOST: 0.0.0.0
+      PORT: 3000
     networks:
       - app_network
 

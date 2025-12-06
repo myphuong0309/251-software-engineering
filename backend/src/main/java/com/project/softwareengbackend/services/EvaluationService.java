@@ -17,6 +17,22 @@ public class EvaluationService {
 
     public Evaluation createEvaluation(Evaluation evaluation) {
         evaluation.setSubmittedDate(LocalDateTime.now());
+
+        // If this session already has an evaluation, update it instead of failing on the unique constraint
+        if (evaluation.getSession() != null && evaluation.getSession().getSessionId() != null) {
+            List<Evaluation> existing = evaluationRepository.findBySession_SessionId(evaluation.getSession().getSessionId());
+            if (!existing.isEmpty()) {
+                Evaluation current = existing.get(0);
+                current.setRatingQuality(evaluation.getRatingQuality());
+                current.setSatisfactionLevel(evaluation.getSatisfactionLevel());
+                current.setComment(evaluation.getComment());
+                current.setSubmittedDate(LocalDateTime.now());
+                current.setStudent(evaluation.getStudent());
+                current.setSession(evaluation.getSession());
+                return evaluationRepository.save(current);
+            }
+        }
+
         return evaluationRepository.save(evaluation);
     }
 

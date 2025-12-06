@@ -18,7 +18,7 @@ const ratings = [
 
 export default function SessionEvaluationPage() {
   const params = useParams<{ id: string }>();
-  const { auth } = useAuth();
+  const { auth, ready } = useAuth();
   const [session, setSession] = useState<Session | null>(null);
   const [scores, setScores] = useState({
     ratingQuality: 0,
@@ -47,8 +47,16 @@ export default function SessionEvaluationPage() {
         setSession(null);
       }
     };
-    if (params.id) load();
-  }, [auth.token, params.id]);
+    if (ready && params.id) load();
+  }, [auth.token, params.id, ready]);
+
+  if (!ready) {
+    return (
+      <div className="max-w-5xl mx-auto py-12 flex justify-center">
+        <i className="fa-solid fa-spinner fa-spin text-3xl text-blue-600" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,7 +88,12 @@ export default function SessionEvaluationPage() {
       setStatus("Feedback submitted. Thank you!");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Submit failed.";
-      if (message.includes("403") || message.includes("401")) {
+      const lower = message.toLowerCase();
+      if (lower.includes("duplicate") || lower.includes("conflict") || lower.includes("409")) {
+        setStatus("You already submitted feedback for this session.");
+        return;
+      }
+      if (lower.includes("403") || lower.includes("401")) {
         setStatus("Session expired or permission denied. Please log in again.");
         return;
       }

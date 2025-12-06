@@ -7,8 +7,8 @@ import { useAuth } from "@/lib/auth-context";
 import { Session, User } from "@/types/api";
 
 export default function TutorMenteesPage() {
-  const { auth } = useAuth();
-  const tutorId = auth.userId || "tutor-1";
+  const { auth, ready } = useAuth();
+  const tutorId = auth.userId;
   const [sessions, setSessions] = useState<Session[]>([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ export default function TutorMenteesPage() {
 
   useEffect(() => {
     const load = async () => {
-      if (!auth.token) {
+      if (!auth.token || !tutorId) {
         setError("Please log in to view mentees.");
         setSessions([]);
         return;
@@ -34,8 +34,8 @@ export default function TutorMenteesPage() {
         setLoading(false);
       }
     };
-    load();
-  }, [auth.token, tutorId]);
+    if (ready) load();
+  }, [auth.token, tutorId, ready]);
 
   const mentees = useMemo(() => {
     const map = new Map<string, { user: User; sessions: Session[] }>();

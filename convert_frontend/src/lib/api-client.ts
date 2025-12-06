@@ -1,5 +1,14 @@
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api";
+const rawBase =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  // Fallback for older env name used in docker-compose
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:8080/api";
+
+// Ensure the base URL always includes the /api prefix once
+const normalizedBase = rawBase.replace(/\/$/, "");
+const API_BASE_URL = normalizedBase.includes("/api")
+  ? normalizedBase
+  : `${normalizedBase}/api`;
 
 type ApiOptions = {
   method?: string;

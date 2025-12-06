@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useEffect, useMemo, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
@@ -18,8 +16,8 @@ const slotsTemplate = [
 ];
 
 export default function TutorAvailabilityPage() {
-  const { auth } = useAuth();
-  const tutorId = auth.userId || "tutor-1";
+  const { auth, ready } = useAuth();
+  const tutorId = auth.userId;
   const [slots, setSlots] = useState<AvailabilitySlot[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,7 +34,7 @@ export default function TutorAvailabilityPage() {
 
   useEffect(() => {
     const load = async () => {
-      if (!auth.token) {
+      if (!auth.token || !tutorId) {
         setError("Please log in to view availability.");
         setSlots([]);
         return;
@@ -54,8 +52,8 @@ export default function TutorAvailabilityPage() {
         setLoading(false);
       }
     };
-    load();
-  }, [auth.token, tutorId]);
+    if (ready) load();
+  }, [auth.token, tutorId, ready]);
 
   const displayedSlots = useMemo(() => {
     return [...slots].sort(
@@ -133,7 +131,7 @@ export default function TutorAvailabilityPage() {
 
   const addSlot = async () => {
     setStatusMessage(null);
-    if (!auth.token) {
+    if (!auth.token || !tutorId) {
       setError("Please log in to save availability.");
       return;
     }
@@ -175,12 +173,11 @@ export default function TutorAvailabilityPage() {
         auth.token,
       );
       setStatusMessage("Availability saved.");
-      // Refresh list
-        const data = await api.getAvailabilityForTutor(tutorId, auth.token);
-        setSlots(data || []);
-      } catch (err) {
-        console.warn("Unable to save availability", err);
-        setError("Unable to save availability.");
+      const data = await api.getAvailabilityForTutor(tutorId, auth.token);
+      setSlots(data || []);
+    } catch (err) {
+      console.warn("Unable to save availability", err);
+      setError("Unable to save availability.");
     } finally {
       setSaving(false);
     }
@@ -338,7 +335,8 @@ export default function TutorAvailabilityPage() {
                 >
                   <div className="flex flex-col text-sm">
                     <span className="font-semibold">
-                      {slot.startTime} - {slot.endTime}
+                      {slot.startTime ? new Date(slot.startTime).toLocaleString() : "Start TBD"} -{" "}
+                      {slot.endTime ? new Date(slot.endTime).toLocaleString() : "End TBD"}
                     </span>
                     <span className="text-xs text-gray-500">
                       Status: {slot.status || "AVAILABLE"}

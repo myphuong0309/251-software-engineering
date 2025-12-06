@@ -7,8 +7,8 @@ import { useAuth } from "@/lib/auth-context";
 import { Resource } from "@/types/api";
 
 export default function TutorResourcesPage() {
-  const { auth } = useAuth();
-  const tutorId = auth.userId || "tutor-1";
+  const { auth, ready } = useAuth();
+  const tutorId = auth.userId;
   const [resources, setResources] = useState<Resource[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export default function TutorResourcesPage() {
 
   useEffect(() => {
     const load = async () => {
-      if (!auth.token) {
+      if (!auth.token || !tutorId) {
         setError("Please log in to view resources.");
         setResources([]);
         return;
@@ -34,8 +34,8 @@ export default function TutorResourcesPage() {
         setLoading(false);
       }
     };
-    load();
-  }, [auth.token, tutorId]);
+    if (ready) load();
+  }, [auth.token, tutorId, ready]);
 
   const filtered = useMemo(() => {
     return resources.filter((r) => {

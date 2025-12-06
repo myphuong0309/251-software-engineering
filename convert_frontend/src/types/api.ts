@@ -96,9 +96,12 @@ export type ReportType =
 
 export interface Report {
   reportId: string;
-  type?: ReportType;
+  type?: ReportType; // legacy field
+  reportType?: ReportType;
   generatedDate?: string;
   content?: string;
+  criteria?: string;
+  generatedBy?: User;
 }
 
 export interface ProgressNote {

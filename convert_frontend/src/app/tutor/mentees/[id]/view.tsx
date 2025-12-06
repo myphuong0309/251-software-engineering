@@ -2,63 +2,74 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-
-const menteeDetails = {
-  emma: {
-    name: "Emma Wilson",
-    major: "Computer Science • 3rd Year",
-    email: "emma.wilson@student.hcmut.edu.vn",
-    faculty: "Faculty of Computer Science & Engineering",
-    enrollment: "September 2021",
-    sessions: "8 completed • Last: 2 days ago",
-    progress: "Good",
-  },
-  michael: {
-    name: "Michael Brown",
-    major: "Computer Engineering • 3rd Year",
-    email: "michael.brown@student.hcmut.edu.vn",
-    faculty: "Faculty of Computer Science & Engineering",
-    enrollment: "September 2021",
-    sessions: "12 completed • Last: Yesterday",
-    progress: "Excellent",
-  },
-  sophia: {
-    name: "Sophia Davis",
-    major: "Information Systems • 3rd Year",
-    email: "sophia.davis@student.hcmut.edu.vn",
-    faculty: "Faculty of Information Systems",
-    enrollment: "September 2021",
-    sessions: "5 completed • Last: 1 week ago",
-    progress: "Needs improvement",
-  },
-  alex: {
-    name: "Alex Chen",
-    major: "Computer Science • 3rd Year",
-    email: "alex.chen@student.hcmut.edu.vn",
-    faculty: "Faculty of Computer Science & Engineering",
-    enrollment: "September 2021",
-    sessions: "3 completed • Last: 3 days ago",
-    progress: "Good",
-  },
-  james: {
-    name: "James Wilson",
-    major: "Software Engineering • 3rd Year",
-    email: "james.wilson@student.hcmut.edu.vn",
-    faculty: "Faculty of Software Engineering",
-    enrollment: "September 2021",
-    sessions: "7 completed • Last: 5 days ago",
-    progress: "Excellent",
-  },
-};
+import { useEffect, useMemo, useState } from "react";
+import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
+import { formatDate, formatTimeRange } from "@/lib/format";
+import { Session, User } from "@/types/api";
 
 export default function TrackProgressPage() {
   const params = useParams<{ id: string }>();
-  const mentee = menteeDetails[(params.id as keyof typeof menteeDetails) || "emma"] || menteeDetails.emma;
-  const initials = mentee.name
-    .split(" ")
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2);
+  const { auth, ready } = useAuth();
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [student, setStudent] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const load = async () => {
+      if (!ready) return;
+      if (!auth.token || !auth.userId) {
+        setError("Please log in to view mentees.");
+        setSessions([]);
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const tutorSessions = await api.getSessionsForTutor(auth.userId, auth.token);
+        const filtered = (tutorSessions || []).filter((s) => s.student?.userId === params.id);
+        setSessions(filtered);
+        if (filtered[0]?.student?.userId) {
+          setStudent(filtered[0].student as User);
+        } else {
+          // fallback: load from /users if not attached on session
+          const user = await api.getUser(params.id, auth.token);
+          setStudent(user);
+        }
+      } catch (err) {
+        console.warn("Unable to load mentee detail", err);
+        const message = err instanceof Error ? err.message : "Unable to load mentee.";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [auth.token, auth.userId, params.id, ready]);
+
+  const stats = useMemo(() => {
+    const completed = sessions.filter((s) => s.status === "COMPLETED");
+    const upcoming = sessions.filter((s) => s.startTime && new Date(s.startTime) > new Date());
+    const last = completed
+      .filter((s) => s.endTime)
+      .sort((a, b) => new Date(b.endTime || 0).getTime() - new Date(a.endTime || 0).getTime())[0];
+    return {
+      completedCount: completed.length,
+      totalCount: sessions.length,
+      upcomingCount: upcoming.length,
+      lastSessionLabel: last?.endTime ? formatDate(last.endTime) : "N/A",
+    };
+  }, [sessions]);
+
+  const initials = useMemo(() => {
+    return (student?.fullName || "Student")
+      .split(" ")
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+  }, [student?.fullName]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
@@ -74,27 +85,32 @@ export default function TrackProgressPage() {
           <span className="text-2xl font-bold">{initials}</span>
         </div>
         <div>
-          <h2 className="text-2xl font-bold">{mentee.name}</h2>
-          <p className="opacity-90 mt-1 text-sm">{mentee.major}</p>
+          <h2 className="text-2xl font-bold">{student?.fullName || "Student"}</h2>
+          <p className="opacity-90 mt-1 text-sm">
+            {(student as any)?.major || "Major not set"} •
+            {student && (student as any).gpa ? ` GPA ${(student as any).gpa}` : " GPA N/A"}
+          </p>
         </div>
       </div>
 
       <div className="bg-white p-8 border-x border-b border-gray-200 shadow-sm mb-8 rounded-b-xl">
+        {loading ? <p className="text-sm text-gray-500">Loading mentee info...</p> : null}
+        {error ? <p className="text-sm text-red-600">{error}</p> : null}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
             <h3 className="text-sm font-bold text-gray-800 mb-6">Student Information</h3>
             <div className="space-y-4 text-sm">
               <div>
                 <p className="text-gray-500 mb-1">Email</p>
-                <p className="text-gray-800 font-medium">{mentee.email}</p>
+                <p className="text-gray-800 font-medium">{student?.email || "N/A"}</p>
               </div>
               <div>
-                <p className="text-gray-500 mb-1">Faculty</p>
-                <p className="text-gray-800 font-medium">{mentee.faculty}</p>
+                <p className="text-gray-500 mb-1">Faculty / Major</p>
+                <p className="text-gray-800 font-medium">{(student as any)?.major || "N/A"}</p>
               </div>
               <div>
-                <p className="text-gray-500 mb-1">Enrollment Date</p>
-                <p className="text-gray-800 font-medium">{mentee.enrollment}</p>
+                <p className="text-gray-500 mb-1">Phone</p>
+                <p className="text-gray-800 font-medium">{student?.phoneNumber || "N/A"}</p>
               </div>
             </div>
           </div>
@@ -103,16 +119,48 @@ export default function TrackProgressPage() {
             <h3 className="text-sm font-bold text-gray-800 mb-6">Progress Notes</h3>
             <div className="space-y-3 text-sm">
               <p className="text-gray-700">
-                <span className="font-semibold">Last session:</span> {mentee.sessions}
+                <span className="font-semibold">Completed:</span> {stats.completedCount} / {stats.totalCount}
               </p>
               <p className="text-gray-700">
-                <span className="font-semibold">Progress status:</span> {mentee.progress}
+                <span className="font-semibold">Upcoming:</span> {stats.upcomingCount}
               </p>
-              <p className="text-gray-500 text-xs">
-                Notes entry area can be added once backend supports it.
+              <p className="text-gray-700">
+                <span className="font-semibold">Last session:</span> {stats.lastSessionLabel}
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="mt-10">
+          <h3 className="text-sm font-bold text-gray-800 mb-4">Session History</h3>
+          {sessions.length === 0 ? (
+            <p className="text-sm text-gray-500">No sessions found for this mentee.</p>
+          ) : (
+            <div className="space-y-3">
+              {sessions.map((s) => (
+                <div
+                  key={s.sessionId}
+                  className="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-semibold text-gray-800">{s.topic || "Session"}</p>
+                    <p className="text-xs text-gray-500">
+                      {s.startTime
+                        ? `${formatDate(s.startTime)} • ${formatTimeRange(s.startTime, s.endTime)}`
+                        : "Date TBD"}
+                    </p>
+                    <p className="text-xs text-gray-500">Status: {s.status || "N/A"}</p>
+                  </div>
+                  <Link
+                    href={`/student/session/${s.sessionId}`}
+                    className="mt-3 sm:mt-0 inline-flex items-center gap-2 text-xs font-semibold text-blue-700 hover:text-blue-800"
+                  >
+                    View session <i className="fa-solid fa-arrow-right text-[10px]" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
