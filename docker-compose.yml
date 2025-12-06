@@ -10,8 +10,6 @@ services:
       MYSQL_DATABASE: tutoring_db
       MYSQL_USER: tutoring_user
       MYSQL_PASSWORD: 4n0TH3r_7u70Ring_p455W0rd#1337
-    ports:
-      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       # UPDATED PATHS BELOW:
@@ -38,16 +36,8 @@ services:
         condition: service_healthy
     networks:
       - app_network
-    # environment:
-    #   # Connects to 'db' service on port 3306
-    #   SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true
-    #   SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
-    #   SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
-    #   # Allow frontend to access backend
-    #   ALLOWED_ORIGINS: "http://localhost:3000"
 
-  # --- Next.js Frontend ---
-  frontend:
+  proxy:
     build: ./convert_frontend
     restart: on-failure
     ports:
@@ -55,9 +45,6 @@ services:
     depends_on:
       - backend
     environment:
-      # Backend URL for Server-Side Rendering (Docker network)
-      API_URL_INTERNAL: http://backend:8080
-      # Backend URL for Client-Side Fetching (Browser access)
       NEXT_PUBLIC_API_URL: http://localhost:8080
 
 volumes:
