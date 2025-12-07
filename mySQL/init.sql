@@ -1,0 +1,1 @@
+-- GRANT ALL PRIVILEGES ON tutoring_db.* TO 'tutoring_user'@'localhost';
